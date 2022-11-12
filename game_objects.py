@@ -139,7 +139,7 @@ class Player(GameObject):
         super(Player, self).tick(level, ins, objects)
         self.x += self.velxd
         self.y += self.velyd
-        if not self.touches_box:
+        if not (self.touches_box and self.touches_ground):
             self.velxd /= 1.05
             self.velyd /= 1.05
         player_tile = Level.pixel_to_tile(self.x, self.y)
@@ -157,9 +157,9 @@ class Player(GameObject):
                         self.velxd = i.velx
                         self.velyd = i.vely
                         if self.velxd != i.velx:
-                            self.velxd /= 1.05
+                            self.velxd /= 1.8
                         if self.velyd != i.vely:
-                            self.velyd /= 1.05
+                            self.velyd /= 1.8
                         break
 
 
@@ -185,7 +185,10 @@ class Player(GameObject):
             else:
                 self.state = self.jumpr
         if ((not left and not right) or (left and right)):
-            self.velx = self.velx / 1.8
+            if self.touches_ground or self.touches_box:
+                self.velx /= 1.8
+            else:
+                self.velx /= 1.05
         if ins["keys"][pygame.K_w] and (self.touches_ground or self.touches_box):
             self.vely = -15
             self.state = self.jumpl
