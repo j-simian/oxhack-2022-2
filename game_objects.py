@@ -14,7 +14,7 @@ class GameObject:
     def render(self, screen):
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(self.x, self.y, 16, 32))
 
-    def tick(self, level):
+    def tick(self, level, keys):
         if self.gravity:
             self.vely = max(5, self.vely+0.2)
         if self.collision:
@@ -23,20 +23,22 @@ class GameObject:
                     if level[i][j] == 1:
                         pixel = Level.tile_to_pixel(i, j)
                         # print(pixel)
-                        if self.x <= pixel[0] and self.x + self.velx > pixel[0]:
+                        if self.x+self.w <= pixel[0] and self.x+self.w + self.velx > pixel[0]: #rightwards
                             self.velx = 0
                             self.x = pixel[0]
-                        if self.x >= pixel[0]+40 and self.x + self.velx < pixel[0]+40:
+                        if self.x >= pixel[0]+40 and self.x + self.velx < pixel[0]+40: #leftwards
                             self.velx = 0
                             self.x = pixel[0]+40
-                        if self.y <= pixel[1] and self.y + self.vely > pixel[1]:
+                        if self.y <= pixel[1] and self.y + self.vely > pixel[1]: #downwards
                             self.vely = 0
                             self.y = pixel[1]
-                        if self.y >= pixel[1]+40 and self.y + self.vely < pixel[1]+40:
+                        if self.y+self.h >= pixel[1]+40 and self.y + self.h + self.vely < pixel[1]+40: #upwards
                             self.vely = 0
                             self.y = pixel[1]+40
         self.y += self.vely
         self.x += self.velx
+
+
 
 
 
@@ -50,5 +52,13 @@ class Player(GameObject):
     def render(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.x, self.y, self.w, self.h))
 
-    def tick(self, level):
-        super(Player, self).tick(level)
+    def tick(self, level, keys):
+        super(Player, self).tick(level, keys)
+        self.handle_input(keys)
+
+    def handle_input(self, keys):
+        if keys[pygame.K_a]:
+            self.velx = min(self.velx - 2, -5)
+        if keys[pygame.K_d]:
+            self.velx = max(self.velx + 2, 5)
+
