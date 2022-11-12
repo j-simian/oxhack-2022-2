@@ -102,7 +102,9 @@ class Player(GameObject):
     def tick(self, level, ins, objects):
         super(Player, self).tick(level, ins, objects)
         player_tile = Level.pixel_to_tile(self.x, self.y)
-        if level.blocks[player_tile[0]][player_tile[1] + 2] == 1 or level.blocks[player_tile[0]+1][player_tile[1]+2] == 1:
+        if player_tile[0] > 47:
+            level.level_index += 1
+        elif level.blocks[player_tile[0]][player_tile[1] + 2] == 1 or level.blocks[player_tile[0]+1][player_tile[1]+2] == 1:
             self.touches_ground = True
         else:
             self.touches_ground = False
