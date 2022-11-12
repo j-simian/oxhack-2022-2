@@ -140,8 +140,8 @@ class Player(GameObject):
         self.x += self.velxd
         self.y += self.velyd
         if not self.touches_box:
-            self.velxd /= 1.8
-            self.velyd /= 1.8
+            self.velxd /= 1.05
+            self.velyd /= 1.05
         player_tile = Level.pixel_to_tile(self.x, self.y)
         self.touches_box = False
         if player_tile[0] > 47:
@@ -154,12 +154,12 @@ class Player(GameObject):
                 if isinstance(i, Controllable_Box):
                     if self.x <= i.x + i.w and self.x >= i.x - self.w and i.y - self.y - self.h <= 2 and i.y - self.y - self.h > -1:
                         self.touches_box = True
-                        self.velxd = max(i.velx, self.velxd)
-                        self.velyd = max(i.vely, self.velyd)
+                        self.velxd = i.velx
+                        self.velyd = i.vely
                         if self.velxd != i.velx:
-                            self.velxd /= 1.2
+                            self.velxd /= 1.05
                         if self.velyd != i.vely:
-                            self.velyd /= 1.2
+                            self.velyd /= 1.05
                         break
 
 
