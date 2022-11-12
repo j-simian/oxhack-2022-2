@@ -44,14 +44,14 @@ class GameObject:
 
 class Controllable_Box(GameObject):
     def __init__(self, x, y, w, h):
-        super(Controllable_Box, self).__init__(x, y)
-        self.w = w
-        self.h = h
+        super(Controllable_Box, self).__init__(x*40, y*40)
+        self.w = w*40
+        self.h = h*40
         self.gravity = False
         self.collision = False
 
     def render(self, screen):
-        pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(self.x, self.y, self.w, self.h))
+        pygame.draw.rect(screen, (0, 0, 255), pygame.Rect(self.x, self.y, self.w, self.h))
 
 class Player(GameObject):
     def __init__(self, x, y):
