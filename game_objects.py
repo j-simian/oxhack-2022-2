@@ -14,7 +14,7 @@ class GameObject:
     def render(self, screen):
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(self.x, self.y, 16, 32))
 
-    def tick(self, level, keys):
+    def tick(self, level, ins):
         if self.gravity:
             self.vely = min(18, self.vely+0.7)
 
@@ -52,23 +52,23 @@ class Player(GameObject):
     def render(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.x, self.y, self.w, self.h))
 
-    def tick(self, level, keys):
-        super(Player, self).tick(level, keys)
+    def tick(self, level, ins):
+        super(Player, self).tick(level, ins)
         player_tile = Level.pixel_to_tile(self.x, self.y)
         if level[player_tile[0]][player_tile[1] + 2] == 1 or level[player_tile[0]+1][player_tile[1]+2] == 1:
             self.touches_ground = True
         else:
             self.touches_ground = False
-        self.handle_input(keys)
+        self.handle_input(ins)
 
-    def handle_input(self, keys):
-        if keys[pygame.K_a]:
+    def handle_input(self, ins):
+        if ins["keys"][pygame.K_a]:
             self.velx = max(self.velx - 2, -15)
-        if keys[pygame.K_d]:
+        if ins["keys"][pygame.K_d]:
             self.velx = min(self.velx + 2, 15)
-        if not keys[pygame.K_d] and not keys[pygame.K_a]:
+        if not ins["keys"][pygame.K_d] and not ins["keys"][pygame.K_a]:
             self.velx = self.velx / 1.8
-        if keys[pygame.K_w] and self.touches_ground:
+        if ins["keys"][pygame.K_w] and self.touches_ground:
             self.vely = -15
-        if keys[pygame.K_e]:
+        if ins["keys"][pygame.K_e]:
             self.vely = -15

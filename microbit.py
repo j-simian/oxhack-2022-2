@@ -3,7 +3,7 @@ import serial
 s_inst = serial.Serial()
 s_inst.baudrate = 115200
 s_inst.port ='COM3'
-s_inst.open()
+# s_inst.open()
 
 
 def bitman(roll, pitch):
@@ -17,13 +17,12 @@ def bitman(roll, pitch):
         packet = packet.strip().split()
         
         if len(packet) == 1:
-            match packet[0]:
-                case 'A':
-                    a = True
-                case 'B':
-                    b = True
-                case 'AB':
-                    a, b = True, True
+            if packet[0] == 'A':
+                a = True
+            elif packet[0] == 'B':
+                b = True
+            elif packet[0] == 'AB':
+                a, b = True, True
 
         elif len(packet) == 2:
             magnitude, direction = packet

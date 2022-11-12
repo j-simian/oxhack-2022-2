@@ -4,7 +4,7 @@ import microbit
 from PIL import Image
 from level import Level
 
-(width, height) = (120, 1080)
+(width, height) = (1920, 1080)
 
 pygame.display.set_caption("oxsplat")
 pygame.init()
@@ -32,14 +32,15 @@ def game_loop():
     while running:
         keys=pygame.key.get_pressed()
 
-        roll, pitch, a, b = microbit.bitman(roll, pitch)
-        bit_keys=(roll, pitch, a, b)
+        # roll, pitch, a, b = microbit.bitman(roll, pitch)
+        # bit_keys=(roll, pitch, a, b)
+        bit_keys = ()
 
         # render
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))
         level.draw_bg(screen, frame)
         for i in objects:
-            i.tick(level.blocks, keys)
+            i.tick(level.blocks, { "keys": keys, "microbit": bit_keys })
         for i in objects:
             i.render(screen)
         level.draw_mg(screen)
