@@ -1,6 +1,12 @@
 import pygame
 from PIL import Image
 
+blocks = {
+    "FF0000": "air"
+}
+
+u(r, 16) + str(g, 16) + str(b, 16) + str(a, 16)
+
 class GameObject:
     def __init__(self, x, y):
         self.x = x
@@ -26,7 +32,7 @@ class Player(GameObject):
         self.gravity = True
 
     def render(self, screen):
-        pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.x, self.y, 16, 32))
+        pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.x, self.y, self.w, self.h))
 
     def tick(self):
         super(Player, self).tick()

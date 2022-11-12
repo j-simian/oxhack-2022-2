@@ -1,5 +1,6 @@
 import pygame
 import game_objects
+from PIL import Image
 
 (width, height) = (1920, 1080)
 
@@ -16,13 +17,15 @@ def game_loop():
     running = True
     while running:
         pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(0, 0, width, height))
+        draw_bg(screen)
         for i in objects:
-            objects.tick()
+            i.tick()
         for i in objects:
-            objects.render(screen)
+            i.render(screen)
         pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
 
 game_loop()
