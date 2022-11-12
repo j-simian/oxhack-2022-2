@@ -120,11 +120,17 @@ class Player(GameObject):
         self.handle_input(ins)
 
     def handle_input(self, ins):
-        if ins["keys"][pygame.K_a]:
+        left, right, up, down = False, False, False, False
+        if self.velx > -10 and ins["keys"][pygame.K_a]:
+            left = True
+        if self.velx < 10 and ins["keys"][pygame.K_d]:
+            right = True
+        
+        if left:
             self.velx = max(self.velx - 2, -12)
-        if ins["keys"][pygame.K_d]:
+        if right:
             self.velx = min(self.velx + 2, 12)
-        if ((not ins["keys"][pygame.K_d] and not ins["keys"][pygame.K_a]) or (ins["keys"][pygame.K_d] and ins["keys"][pygame.K_a])) and not self.touches_box:
+        if ((not left and not right) or (left and right)) and not self.touches_box:
             self.velx = self.velx / 1.8
         if ins["keys"][pygame.K_w] and (self.touches_ground or self.touches_box):
             self.vely = -15
