@@ -21,7 +21,7 @@ def game_loop():
         pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(0, 0, width, height))
         level.draw_bg(screen)
         for i in objects:
-            i.tick()
+            i.tick(level.blocks)
         for i in objects:
             i.render(screen)
         pygame.display.flip()
