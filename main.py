@@ -10,12 +10,16 @@ pygame.display.flip()
 
 player = game_objects.Player(100, 100)
 
+objects = [player]
+
 def game_loop():
     running = True
     while running:
         pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(0, 0, width, height))
-        player.render(screen)
-        player.tick()
+        for i in objects:
+            objects.tick()
+        for i in objects:
+            objects.render(screen)
         pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
