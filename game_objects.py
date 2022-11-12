@@ -71,9 +71,10 @@ class Controllable_Box(GameObject):
         super(Controllable_Box, self).tick(level, ins, objects)
 
         blocks=level.bounding_boxes
+        print(level.bounding_boxes)
         for i in range(0, len(blocks)):
             for j in range(0, len(blocks[i])):
-                if blocks[i][j] != 1:
+                if blocks[i][j] == 1:
                     continue
                 pixel = Level.tile_to_pixel(i, j)
                 if self.x+self.w <= pixel[0] and self.x+self.w + self.velx > pixel[0] and self.y + self.h > pixel[1] and self.y < pixel[1] + 40: #rightwards
