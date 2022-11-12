@@ -17,7 +17,6 @@ def load_level(index):
         for x in range(0,48):
             r,g,b,a=(image.getpixel((x, y)))
             hex_code = hex(r*16**6+g*16**4+b*16**2+a)[2:].zfill(8)
-            print(hex_code)
             level_row+=[blocks[hex_code]]
         level+=[level_row]
     return(level)
@@ -29,7 +28,6 @@ def load_bounding_box(index):
         level_row=[]
         for x in range(0,48):
             r,g,b,a=(image.getpixel((x, y)))
-            print(a)
             if a==0:
                 level_row+=[0]
             else:
