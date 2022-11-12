@@ -70,6 +70,8 @@ class Player(GameObject):
             self.touches_ground = True
         else:
             self.touches_ground = False
+
+
         self.handle_input(ins)
 
     def handle_input(self, ins):

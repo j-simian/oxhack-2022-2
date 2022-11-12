@@ -46,6 +46,7 @@ def game_loop():
         for i in objects:
             i.render(screen)
         level.draw_mg(screen)
+        level.shooting_stars(screen, frame)
         level.draw_fg(screen)
         pygame.display.flip()
         for event in pygame.event.get():
