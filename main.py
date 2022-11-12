@@ -10,6 +10,8 @@ pygame.display.flip()
 def game_loop():
     running = True
     while running:
+        pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(0, 0, width, height))
+        pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
