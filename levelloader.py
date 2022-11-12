@@ -31,9 +31,9 @@ class Level_Loader:
                         height=1
                         while x+width<48 and self.level_image.getpixel((x+width, y))==(0,0,255,255):
                             width+=1
-                        while y.height<27 and self.level_image.getpixel((x, y+height))==(0,0,255,255):
+                        while y+height<27 and self.level_image.getpixel((x, y+height))==(0,0,255,255):
                             height+=1
-                        boxes+=[(x,y,width,height)]
+                        self.boxes+=[(x,y,width,height)]
 
                 level_column+=[block]
             self.level+=[level_column]
@@ -45,9 +45,9 @@ class Level_Loader:
     def load_bounding_box(self, index):
         level_bounding_box = Image.open("assets/lvl_data/lvl"+str(index)+"b.png").convert("RGBA")
         level=[]
-        for y in range(0, 27):
+        for x in range(0, 48):
             level_row=[]
-            for x in range(0,48):
+            for y in range(0,27):
                 r,g,b,a=(level_bounding_box.getpixel((x, y)))
                 if a==0:
                     level_row+=[0]
