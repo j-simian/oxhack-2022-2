@@ -7,6 +7,7 @@ blocks = {
     "ff0000ff": 2, #    START   (initial position of player)
     "ffff00ff": 3, #    END     (level won when player gets here)
     "0000ffff": 4, #    BOX     (player-2-controlled box)
+    "ff00ffff": 5, #    SPIKE   (kills you)
 }
 
 def load_level(index_string):
