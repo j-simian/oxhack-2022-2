@@ -14,7 +14,7 @@ class GameObject:
     def render(self, screen):
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(self.x, self.y, 16, 32))
 
-    def tick(self, level, ins):
+    def tick(self, level, ins, objects):
         if self.gravity:
             self.vely = min(18, self.vely+0.7)
 
@@ -36,9 +36,21 @@ class GameObject:
                     if self.y >= pixel[1] + 40 and self.y + self.vely < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
                         self.vely = 0
                         self.y = pixel[1] + 41
-                    # if self.y >= pixel[1]+40 and self.y + self.vely < pixel[1]+40: #upwards
-                    #     self.vely = 0
-                    #     self.y = pixel[1]+40
+                    
+                    for each in objects:
+                        if isinstance(each, Controllable_Box):
+                            if self.x+self.w <= each.x and self.x+self.w + self.velx > each.x and self.y + self.h > each.y and self.y < each.y + each.h: #rightwards
+                                self.velx = 0
+                                self.x = each.x - self.w - 1
+                            if self.x >= each.x+each.w and self.x + self.velx < each.x+each.w and self.y + self.h > each.y and self.y < each.y + each.h: #leftwards
+                                self.velx = 0
+                                self.x = each.x+each.w+1
+                            if self.y + self.h <= each.y and self.y + self.vely + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards
+                                self.vely = 0
+                                self.y = each.y - self.h
+                            if self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards
+                                self.vely = 0
+                                self.y = each.y + each.h+1
         self.y += self.vely
         self.x += self.velx
 
@@ -63,8 +75,8 @@ class Player(GameObject):
     def render(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.x, self.y, self.w, self.h))
 
-    def tick(self, level, ins):
-        super(Player, self).tick(level, ins)
+    def tick(self, level, ins, objects):
+        super(Player, self).tick(level, ins, objects)
         player_tile = Level.pixel_to_tile(self.x, self.y)
         if level[player_tile[0]][player_tile[1] + 2] == 1 or level[player_tile[0]+1][player_tile[1]+2] == 1:
             self.touches_ground = True
