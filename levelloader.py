@@ -31,9 +31,9 @@ class Level_Loader:
                         height=1
                         while x+width<48 and self.level_image.getpixel((x+width, y))==(0,0,255,255):
                             width+=1
-                        while y.height<27 and self.level_image.getpixel((x, y+height))==(0,0,255,255):
+                        while y+height<27 and self.level_image.getpixel((x, y+height))==(0,0,255,255):
                             height+=1
-                        boxes+=[(x,y,width,height)]
+                        self.boxes+=[(x,y,width,height)]
 
                 level_column+=[block]
             self.level+=[level_column]

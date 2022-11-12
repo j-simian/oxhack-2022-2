@@ -1,6 +1,6 @@
 import pygame
 import game_objects
-import microbit
+#import microbit
 from PIL import Image
 from level import Level
 
@@ -17,6 +17,8 @@ objects = [player]
 keys = []
 bit_keys = []
 level = Level(1)
+for each in level.boxes:
+    objects+=[game_objects.Controllable_Box(each[0],each[1],each[2],each[3])]
 clock = pygame.time.Clock()
 
 ROLL = 512
@@ -31,8 +33,8 @@ def game_loop():
     while running:
         keys=pygame.key.get_pressed()
 
-        roll, pitch, a, b = microbit.bitman(roll, pitch)
-        bit_keys=(roll, pitch, a, b)
+        #roll, pitch, a, b = microbit.bitman(roll, pitch)
+        #bit_keys=(roll, pitch, a, b)
 
         # render
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))

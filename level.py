@@ -5,7 +5,10 @@ class Level:
     def __init__(self, index):
         self.loader = Level_Loader(1)
         self.blocks = self.loader.load_level(1)
-        self.bg_img = pygame.image.load("./assets/art/background_stars.png").convert_alpha()
+        self.player_position = self.loader.player_initial_position(1)
+        self.boxes = self.loader.box_initialisation(1)
+        print(self.boxes)
+        self.bg_img = pygame.image.load("./assets/art/background1.png").convert_alpha()
         self.radcam = pygame.image.load("./assets/art/background_radcam.png").convert_alpha()
         self.level = pygame.transform.scale(pygame.image.load("./assets/lvl_data/lvl1.png").convert_alpha(), (1920, 1080))
 
