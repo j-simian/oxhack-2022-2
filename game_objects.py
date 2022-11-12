@@ -22,19 +22,19 @@ class GameObject:
                 for j in range(0, len(level[i])):
                     if level[i][j] == 1:
                         pixel = Level.tile_to_pixel(i, j)
-                        if self.x < pixel[0] and self.x + self.velx >= pixel[0]:
+                        # print(pixel)
+                        if self.x <= pixel[0] and self.x + self.velx > pixel[0]:
                             self.velx = 0
                             self.x = pixel[0]
-                        if self.x > pixel[0]+40 and self.x + self.velx <= pixel[0]+40:
+                        if self.x >= pixel[0]+40 and self.x + self.velx < pixel[0]+40:
                             self.velx = 0
                             self.x = pixel[0]+40
-                        if self.y < pixel[1] and self.y + self.vely >= pixel[1]:
+                        if self.y <= pixel[1] and self.y + self.vely > pixel[1]:
                             self.vely = 0
                             self.y = pixel[1]
-                        if self.y > pixel[1]+40 and self.y + self.vely <= pixel[1]+40:
+                        if self.y >= pixel[1]+40 and self.y + self.vely < pixel[1]+40:
                             self.vely = 0
                             self.y = pixel[1]+40
-                            print("hi")
         self.y += self.vely
         self.x += self.velx
 
