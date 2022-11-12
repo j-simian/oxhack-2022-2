@@ -38,7 +38,7 @@ class GameObject:
                     if self.y >= pixel[1] + 40 and self.y + self.vely < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
                         self.vely = 0
                         self.y = pixel[1] + 41
-                    
+
                     for each in objects:
                         if isinstance(each, Controllable_Box):
                             if self.x+self.w <= each.x and self.x+self.w + self.velx > each.x and self.y + self.h > each.y and self.y < each.y + each.h: #rightwards
@@ -64,9 +64,10 @@ class Controllable_Box(GameObject):
         self.gravity = False
         self.collision = False
         self.velx = 0.2
+        self.me = pygame.image.load("./assets/art/lvl1/moveblock.png").convert_alpha()
 
     def render(self, screen):
-        pygame.draw.rect(screen, (0, 0, 255), pygame.Rect(self.x, self.y, self.w, self.h))
+        screen.blit(self.me, (self.x - 28, self.y - 19))
 
     def tick(self, level, ins, objects):
         super(Controllable_Box, self).tick(level, ins, objects)
@@ -104,7 +105,9 @@ class Player(GameObject):
     def tick(self, level, ins, objects):
         super(Player, self).tick(level, ins, objects)
         player_tile = Level.pixel_to_tile(self.x, self.y)
-        if level.blocks[player_tile[0]][player_tile[1] + 2] == 1 or level.blocks[player_tile[0]+1][player_tile[1]+2] == 1:
+        if player_tile[0] > 47:
+            level.level_index += 1
+        elif level.blocks[player_tile[0]][player_tile[1] + 2] == 1 or level.blocks[player_tile[0]+1][player_tile[1]+2] == 1:
             self.touches_ground = True
         else:
             self.touches_box = False
