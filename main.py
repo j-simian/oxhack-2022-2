@@ -1,10 +1,11 @@
 import pygame
 import game_objects
 from PIL import Image
+from level import Level
 
 (width, height) = (1920, 1080)
 
-pygame.display.set_caption("minimal program")
+pygame.display.set_caption("oxsplat")
 pygame.init()
 screen = pygame.display.set_mode((width, height))
 pygame.display.flip()
@@ -12,12 +13,13 @@ pygame.display.flip()
 player = game_objects.Player(100, 100)
 
 objects = [player]
+level = Level(1)
 
 def game_loop():
     running = True
     while running:
         pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(0, 0, width, height))
-        draw_bg(screen)
+        level.draw_bg(screen)
         for i in objects:
             i.tick()
         for i in objects:

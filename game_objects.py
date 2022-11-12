@@ -1,12 +1,6 @@
 import pygame
 from PIL import Image
 
-blocks = {
-    "FF0000": "air"
-}
-
-u(r, 16) + str(g, 16) + str(b, 16) + str(a, 16)
-
 class GameObject:
     def __init__(self, x, y):
         self.x = x
