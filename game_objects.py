@@ -63,7 +63,7 @@ class Controllable_Box(GameObject):
         self.h = h*40
         self.gravity = False
         self.collision = False
-        self.velx = 4
+        self.velx = 0
         self.me = pygame.image.load("./assets/art/lvl1/moveblock.png").convert_alpha()
 
     def render(self, screen):
@@ -71,6 +71,25 @@ class Controllable_Box(GameObject):
 
     def tick(self, level, ins, objects):
         super(Controllable_Box, self).tick(level, ins, objects)
+
+        roll = ins["microbit"][0]
+        pitch= ins["microbit"][1]
+        if roll<-30:
+            tiltx=max(roll,-60)
+        elif roll>30:
+            tiltx=min(roll,60)
+        else:
+            tiltx=0
+        
+        if pitch<-30:
+            tilty=max(pitch,-60)
+        elif pitch>30:
+            tilty=min(pitch,60)
+        else:
+            tilty=0
+        self.velx = (tiltx/5 + self.velx) / 2
+        self.vely = (tilty/5 + self.vely) / 2
+
 
         blocks=level.bounding_boxes
         for i in range(0, len(blocks)):

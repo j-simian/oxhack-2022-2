@@ -35,8 +35,8 @@ def game_loop():
         keys=pygame.key.get_pressed()
 
         bit_keys = ()
-        # roll, pitch, a, b = microbit.bitman(roll, pitch)
-        # bit_keys=(roll, pitch, a, b)
+        roll, pitch, a, b = microbit.bitman(roll, pitch)
+        bit_keys=(roll, pitch, a, b)
 
         # render
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height)) 
