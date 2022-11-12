@@ -24,7 +24,7 @@ class Level_Loader:
                 if block==2:
                     self.startlocation = (x*40,y*40)
                 level_row+=[block]
-            level+=[level_row]
+            self.level+=[level_row]
 
     
     def load_level(self,index):
