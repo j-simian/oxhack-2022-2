@@ -61,7 +61,7 @@ class Controllable_Box(GameObject):
         super(Controllable_Box, self).__init__(x*40, y*40)
         self.w = w*40
         self.h = h*40
-        self.gravity = True
+        self.gravity = False
         self.collision = False
 
     def render(self, screen):
@@ -71,7 +71,6 @@ class Controllable_Box(GameObject):
         super(Controllable_Box, self).tick(level, ins, objects)
 
         blocks=level.bounding_boxes
-        print(level.bounding_boxes)
         for i in range(0, len(blocks)):
             for j in range(0, len(blocks[i])):
                 if blocks[i][j] == 1:
