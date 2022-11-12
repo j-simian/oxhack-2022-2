@@ -1,5 +1,5 @@
 import pygame
-import player
+import game_objects
 
 (width, height) = (1920, 1080)
 
@@ -8,7 +8,7 @@ pygame.init()
 screen = pygame.display.set_mode((width, height))
 pygame.display.flip()
 
-player = player.Player(100, 100)
+player = game_objects.Player(100, 100)
 
 def game_loop():
     running = True
