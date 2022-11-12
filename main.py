@@ -1,7 +1,7 @@
 import pygame
 import player
 
-(width, height) = (800, 600)
+(width, height) = (1920, 1080)
 
 pygame.display.set_caption("minimal program")
 pygame.init()
