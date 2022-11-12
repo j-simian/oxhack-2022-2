@@ -100,8 +100,10 @@ class Player(GameObject):
         self.gravity = True
         self.touches_box = False
         self.stand = pygame.image.load("./assets/art/sprite/stand.png").convert_alpha()
-        self.jumpr = pygame.image.load("./assets/art/sprite/jump right.png").convert_alpha()
-        self.jumpl = pygame.image.load("./assets/art/sprite/jump left.png").convert_alpha()
+        self.jumpur = pygame.image.load("./assets/art/sprite/jump up right.png").convert_alpha()
+        self.jumpul = pygame.image.load("./assets/art/sprite/jump up left.png").convert_alpha()
+        self.jumpdr = pygame.image.load("./assets/art/sprite/jump down right.png").convert_alpha()
+        self.jumpdl = pygame.image.load("./assets/art/sprite/jump down left.png").convert_alpha()
         self.walkr = [pygame.image.load("./assets/art/sprite/right walk 1.png").convert_alpha(), pygame.image.load("./assets/art/sprite/right walk 2.png").convert_alpha(), pygame.image.load("./assets/art/sprite/right walk 3.png").convert_alpha(), pygame.image.load("./assets/art/sprite/right walk 4.png").convert_alpha()]
         self.walkl = [pygame.image.load("./assets/art/sprite/left walk 1.png").convert_alpha(), pygame.image.load("./assets/art/sprite/left walk 2.png").convert_alpha(), pygame.image.load("./assets/art/sprite/left walk 3.png").convert_alpha(), pygame.image.load("./assets/art/sprite/left walk 4.png").convert_alpha()]
         self.state = self.stand
@@ -110,7 +112,7 @@ class Player(GameObject):
 
     def render(self, screen, frame):
         if self.state == self.walkl or self.state == self.walkr:
-            screen.blit(self.state[(int(frame / 12)) % 4], (self.x - 22, self.y - 15))
+            screen.blit(self.state[(int(frame / 9)) % 4], (self.x - 22, self.y - 15))
         else:
             screen.blit(self.state, (self.x - 22, self.y - 15))
 
@@ -158,17 +160,17 @@ class Player(GameObject):
             if self.touches_ground or self.touches_box:
                 self.state = self.walkl
             else:
-                self.state = self.jumpl
+                self.state = self.jumpul
         if right:
             self.velx = min(self.velx + 2, 12)
             if self.touches_ground or self.touches_box:
                 self.state = self.walkr
             else:
-                self.state = self.jumpr
+                self.state = self.jumpur
         if ((not left and not right) or (left and right)):
             self.velx = self.velx / 1.8
         if ins["keys"][pygame.K_w] and (self.touches_ground or self.touches_box):
             self.vely = -15
-            self.state = self.jumpl
+            self.state = self.jumpul
         if ins["keys"][pygame.K_e]:
             self.vely = -15
