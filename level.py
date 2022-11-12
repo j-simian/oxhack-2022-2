@@ -1,4 +1,4 @@
-from levelloader import Level_Loader 
+from levelloader import Level_Loader
 import pygame
 import math
 import random
@@ -18,6 +18,8 @@ class Level:
         self.fg = pygame.image.load("./assets/art/lvl1/foreground.png").convert_alpha()
         self.mg = pygame.image.load("./assets/art/lvl1/midground.png").convert_alpha()
         self.stars = []
+        self.starx = 960
+        self.stary = -100
         for i in range(0, 4):
             self.stars += [pygame.image.load("./assets/art/shooting_star_" + str(i+1) + ".png").convert_alpha()]
         self.star_timings = []
@@ -49,4 +51,3 @@ class Level:
     @staticmethod
     def tile_to_pixel(x, y):
         return (x * 40, y * 40)
-

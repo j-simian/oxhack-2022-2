@@ -38,7 +38,7 @@ class GameObject:
                     if self.y >= pixel[1] + 40 and self.y + self.vely < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
                         self.vely = 0
                         self.y = pixel[1] + 41
-                    
+
                     for each in objects:
                         if isinstance(each, Controllable_Box):
                             if self.x+self.w <= each.x and self.x+self.w + self.velx > each.x and self.y + self.h > each.y and self.y < each.y + each.h: #rightwards
@@ -50,7 +50,7 @@ class GameObject:
                             if self.y + self.h <= each.y and self.y + self.vely + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards
                                 self.vely = 0
                                 self.y = each.y - self.h
-                            if self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards
+                            if self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x: #upwards
                                 self.vely = 0
                                 self.y = each.y + each.h+1
         self.y += self.vely
@@ -63,9 +63,11 @@ class Controllable_Box(GameObject):
         self.h = h*40
         self.gravity = False
         self.collision = False
+        self.velx = 0.2
+        self.me = pygame.image.load("./assets/art/lvl1/moveblock.png").convert_alpha()
 
     def render(self, screen):
-        pygame.draw.rect(screen, (0, 0, 255), pygame.Rect(self.x, self.y, self.w, self.h))
+        screen.blit(self.me, (self.x - 28, self.y - 19))
 
     def tick(self, level, ins, objects):
         super(Controllable_Box, self).tick(level, ins, objects)
@@ -95,6 +97,7 @@ class Player(GameObject):
         self.w = 40
         self.h = 80
         self.gravity = True
+        self.touches_box = False
 
     def render(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.x, self.y, self.w, self.h))
@@ -107,19 +110,26 @@ class Player(GameObject):
         elif level.blocks[player_tile[0]][player_tile[1] + 2] == 1 or level.blocks[player_tile[0]+1][player_tile[1]+2] == 1:
             self.touches_ground = True
         else:
+            self.touches_box = False
             self.touches_ground = False
+            for i in objects:
+                if isinstance(i, Controllable_Box):
+                    if self.x <= i.x + i.w and self.x >= i.x - self.w and i.y - self.y - self.h <= 2 and i.y - self.y - self.h > -1:
+                        self.touches_box = True
+                        self.velx = i.velx
+                        break
 
 
         self.handle_input(ins)
 
     def handle_input(self, ins):
         if ins["keys"][pygame.K_a]:
-            self.velx = max(self.velx - 2, -15)
+            self.velx = max(self.velx - 2, -12)
         if ins["keys"][pygame.K_d]:
-            self.velx = min(self.velx + 2, 15)
-        if not ins["keys"][pygame.K_d] and not ins["keys"][pygame.K_a]:
+            self.velx = min(self.velx + 2, 12)
+        if ((not ins["keys"][pygame.K_d] and not ins["keys"][pygame.K_a]) or (ins["keys"][pygame.K_d] and ins["keys"][pygame.K_a])) and not self.touches_box:
             self.velx = self.velx / 1.8
-        if ins["keys"][pygame.K_w] and self.touches_ground:
+        if ins["keys"][pygame.K_w] and (self.touches_ground or self.touches_box):
             self.vely = -15
         if ins["keys"][pygame.K_e]:
             self.vely = -15

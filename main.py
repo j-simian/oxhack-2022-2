@@ -1,6 +1,6 @@
 import pygame
 import game_objects
-#import microbit
+import microbit
 from PIL import Image
 from level import Level
 
@@ -35,18 +35,18 @@ def game_loop():
         keys=pygame.key.get_pressed()
 
         bit_keys = ()
-        #roll, pitch, a, b = microbit.bitman(roll, pitch)
-        #bit_keys=(roll, pitch, a, b)
+        roll, pitch, a, b = microbit.bitman(roll, pitch)
+        bit_keys=(roll, pitch, a, b)
 
         # render
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))
         level.draw_bg(screen, frame)
+        level.shooting_stars(screen, frame)
         for i in objects:
             i.tick(level, { "keys": keys, "microbit": bit_keys }, objects)
         for i in objects:
             i.render(screen)
         level.draw_mg(screen)
-        level.shooting_stars(screen, frame)
         level.draw_fg(screen)
         pygame.display.flip()
         for event in pygame.event.get():
