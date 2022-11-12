@@ -15,16 +15,16 @@ class Level_Loader:
         self.startlocation = (-1,-1)
 
         self.level=[]
-        for y in range(0, 27):
-            level_row=[]
-            for x in range(0,48):
+        for x in range(0, 48):
+            level_column=[]
+            for y in range(0,27):
                 r,g,b,a=(self.level_image.getpixel((x, y)))
                 hex_code = hex(r*16**6+g*16**4+b*16**2+a)[2:].zfill(8)
                 block=blocks[hex_code]
                 if block==2:
                     self.startlocation = (x*40,y*40)
-                level_row+=[block]
-            self.level+=[level_row]
+                level_column+=[block]
+            self.level+=[level_column]
 
     
     def load_level(self,index):
