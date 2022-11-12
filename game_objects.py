@@ -1,4 +1,6 @@
 import pygame
+from PIL import Image
+
 class GameObject:
     def __init__(self, x, y):
         self.x = x
@@ -15,7 +17,6 @@ class GameObject:
         self.x += self.velx
         if self.gravity:
             self.vely = max(2, self.vely+0.2)
-
 
 class Player(GameObject):
     def __init__(self, x, y):
