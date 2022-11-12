@@ -98,12 +98,18 @@ class Player(GameObject):
         self.h = 80
         self.gravity = True
         self.touches_box = False
+        self.velxd = 0
+        self.velyd = 0
 
     def render(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.x, self.y, self.w, self.h))
 
     def tick(self, level, ins, objects):
         super(Player, self).tick(level, ins, objects)
+        self.x += self.velxd
+        self.y += self.velyd
+        self.velxd = 0
+        self.velyd = 0
         player_tile = Level.pixel_to_tile(self.x, self.y)
         if player_tile[0] > 47:
             level.level_index += 1
@@ -116,7 +122,8 @@ class Player(GameObject):
                 if isinstance(i, Controllable_Box):
                     if self.x <= i.x + i.w and self.x >= i.x - self.w and i.y - self.y - self.h <= 2 and i.y - self.y - self.h > -1:
                         self.touches_box = True
-                        self.velx = i.velx
+                        self.velxd = i.velx
+                        self.velyd = i.vely
                         break
 
 
@@ -133,7 +140,7 @@ class Player(GameObject):
             self.velx = max(self.velx - 2, -12)
         if right:
             self.velx = min(self.velx + 2, 12)
-        if ((not left and not right) or (left and right)) and not self.touches_box:
+        if ((not left and not right) or (left and right)):
             self.velx = self.velx / 1.8
         if ins["keys"][pygame.K_w] and (self.touches_ground or self.touches_box):
             self.vely = -15
