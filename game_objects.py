@@ -26,7 +26,7 @@ class Player(GameObject):
         self.gravity = True
 
     def render(self, screen):
-        pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.x, self.y, 16, 32))
+        pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.x, self.y, self.w, self.h))
 
     def tick(self):
         super(Player, self).tick()
