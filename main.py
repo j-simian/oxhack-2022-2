@@ -39,7 +39,7 @@ def game_loop():
         # bit_keys=(roll, pitch, a, b)
 
         # render
-        pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))
+        pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height)) 
         level.draw_bg(screen, frame)
         level.shooting_stars(screen, frame)
         for i in objects:

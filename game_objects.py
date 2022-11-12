@@ -63,7 +63,7 @@ class Controllable_Box(GameObject):
         self.h = h*40
         self.gravity = False
         self.collision = False
-        self.velx = 0.2
+        self.velx = 4
         self.me = pygame.image.load("./assets/art/lvl1/moveblock.png").convert_alpha()
 
     def render(self, screen):
@@ -108,8 +108,7 @@ class Player(GameObject):
         super(Player, self).tick(level, ins, objects)
         self.x += self.velxd
         self.y += self.velyd
-        self.velxd = 0
-        self.velyd = 0
+       
         player_tile = Level.pixel_to_tile(self.x, self.y)
         if player_tile[0] > 47:
             level.level_index += 1
@@ -122,8 +121,12 @@ class Player(GameObject):
                 if isinstance(i, Controllable_Box):
                     if self.x <= i.x + i.w and self.x >= i.x - self.w and i.y - self.y - self.h <= 2 and i.y - self.y - self.h > -1:
                         self.touches_box = True
-                        self.velxd = i.velx
+                        self.velxd = max(i.velx, self.velxd)
                         self.velyd = i.vely
+                        if self.velxd != i.velx:
+                            self.velxd /= 1.8
+                        if self.velyd != i.vely:
+                            self.velyd /= 1.8
                         break
 
 
