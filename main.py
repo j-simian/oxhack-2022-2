@@ -45,7 +45,7 @@ def game_loop():
         for i in objects:
             i.tick(level, { "keys": keys, "microbit": bit_keys }, objects)
         for i in objects:
-            i.render(screen)
+            i.render(scree, frame)
         level.draw_mg(screen)
         level.draw_fg(screen)
         pygame.display.flip()

@@ -11,7 +11,7 @@ class GameObject:
         self.gravity = False
         self.collision = True
 
-    def render(self, screen):
+    def render(self, screen, frame):
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(self.x, self.y, 16, 32))
 
     def tick(self, level, ins, objects):
@@ -66,7 +66,7 @@ class Controllable_Box(GameObject):
         self.velx = 0.2
         self.me = pygame.image.load("./assets/art/lvl1/moveblock.png").convert_alpha()
 
-    def render(self, screen):
+    def render(self, screen, frame):
         screen.blit(self.me, (self.x - 28, self.y - 19))
 
     def tick(self, level, ins, objects):
@@ -98,9 +98,18 @@ class Player(GameObject):
         self.h = 80
         self.gravity = True
         self.touches_box = False
+        self.stand = pygame.image.load("./assets/art/sprite/stand.png").convert_alpha()
+        self.jumpr = pygame.image.load("./assets/art/sprite/jump right.png").convert_alpha()
+        self.jumpl = pygame.image.load("./assets/art/sprite/jump left.png").convert_alpha()
+        self.walkr = [pygame.image.load("./assets/art/sprite/right walk 1.png").convert_alpha(), pygame.image.load("./assets/art/sprite/right walk 2.png").convert_alpha(), pygame.image.load("./assets/art/sprite/right walk 3.png").convert_alpha(), pygame.image.load("./assets/art/sprite/right walk 4.png").convert_alpha()]
+        self.walkl = [pygame.image.load("./assets/art/sprite/left walk 1.png").convert_alpha(), pygame.image.load("./assets/art/sprite/left walk 2.png").convert_alpha(), pygame.image.load("./assets/art/sprite/left walk 3.png").convert_alpha(), pygame.image.load("./assets/art/sprite/left walk 4.png").convert_alpha()]
+        self.state = self.stand
 
-    def render(self, screen):
-        pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.x, self.y, self.w, self.h))
+    def render(self, screen, frame):
+        if self.state == self.walkl or self.state == self.walkr:
+            screen.blit(self.state[(frame / 12) % 4], (self.x - 22, self.y - 15))
+        else:
+            screen.blit(self.state, (self.x - 22, self.y - 15))
 
     def tick(self, level, ins, objects):
         super(Player, self).tick(level, ins, objects)
@@ -123,11 +132,21 @@ class Player(GameObject):
     def handle_input(self, ins):
         if ins["keys"][pygame.K_a]:
             self.velx = max(self.velx - 2, -12)
+            if self.touches_ground or self.touches_box:
+                self.state = self.walkl
+            else:
+                self.state = self.jumpl
         if ins["keys"][pygame.K_d]:
             self.velx = min(self.velx + 2, 12)
+            if self.touches_ground or self.touches_box:
+                self.state = self.walkr
+            else:
+                self.state = self.jumpr
         if ((not ins["keys"][pygame.K_d] and not ins["keys"][pygame.K_a]) or (ins["keys"][pygame.K_d] and ins["keys"][pygame.K_a])) and not self.touches_box:
             self.velx = self.velx / 1.8
+            self.state = self.stand
         if ins["keys"][pygame.K_w] and (self.touches_ground or self.touches_box):
             self.vely = -15
+            self.state = self.jumpl
         if ins["keys"][pygame.K_e]:
             self.vely = -15
