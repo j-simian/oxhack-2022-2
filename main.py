@@ -1,5 +1,6 @@
 import pygame
 import game_objects
+import microbit
 from PIL import Image
 from level import Level
 
@@ -14,13 +15,24 @@ player = game_objects.Player(100, 100)
 
 objects = [player]
 keys = []
+bit_keys = []
 level = Level(1)
-clock = pygame.time.Clock() 
+clock = pygame.time.Clock()
+
+ROLL = 512
+PITCH = 513
+BIT_A = 514
+BIT_B = 515
+
 
 def game_loop():
     running = 1
+    roll, pitch = 0, 0
     while running:
         keys=pygame.key.get_pressed()
+
+        roll, pitch, a, b = microbit.bitman(roll, pitch)
+        bit_keys=(roll, pitch, a, b)
 
         # render
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))
