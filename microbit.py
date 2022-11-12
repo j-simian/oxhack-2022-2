@@ -1,9 +1,9 @@
 import serial
 
-# s_inst = serial.Serial()
-# s_inst.baudrate = 115200
-# s_inst.port ='COM3'
-# s_inst.open()
+s_inst = serial.Serial()
+s_inst.baudrate = 115200
+s_inst.port ='COM6'
+s_inst.open()
 
 
 def bitman(roll, pitch):
@@ -27,8 +27,8 @@ def bitman(roll, pitch):
         elif len(packet) == 2:
             magnitude, direction = packet
             if direction == "ROLL":
-                roll = magnitude
+                roll = int(magnitude)
             if direction == "PITCH":
-                pitch = magnitude
+                pitch = int(magnitude)
 
     return roll, pitch, a, b    

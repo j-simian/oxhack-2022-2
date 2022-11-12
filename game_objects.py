@@ -10,6 +10,7 @@ class GameObject:
         self.velx = 0
         self.gravity = False
         self.collision = True
+        self.touches_ground = False
 
     def render(self, screen, frame):
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(self.x, self.y, 16, 32))
@@ -63,7 +64,7 @@ class Controllable_Box(GameObject):
         self.h = h*40
         self.gravity = False
         self.collision = False
-        self.velx = 4
+        self.velx = 0
         self.me = pygame.image.load("./assets/art/lvl1/moveblock.png").convert_alpha()
 
     def render(self, screen, frame):
@@ -71,6 +72,25 @@ class Controllable_Box(GameObject):
 
     def tick(self, level, ins, objects):
         super(Controllable_Box, self).tick(level, ins, objects)
+
+        roll = ins["microbit"][0]
+        pitch= ins["microbit"][1]
+        if roll<-30:
+            tiltx=max(roll,-60)
+        elif roll>30:
+            tiltx=min(roll,60)
+        else:
+            tiltx=0
+        
+        if pitch<-30:
+            tilty=max(pitch,-60)
+        elif pitch>30:
+            tilty=min(pitch,60)
+        else:
+            tilty=0
+        self.velx = (tiltx/5 + self.velx) / 2
+        self.vely = (tilty/5 + self.vely) / 2
+
 
         blocks=level.bounding_boxes
         for i in range(0, len(blocks)):
@@ -114,6 +134,8 @@ class Player(GameObject):
             screen.blit(self.state, (self.x - 22, self.y - 15))
 
     def tick(self, level, ins, objects):
+        if abs(self.velx) < 1 and (self.touches_ground or self.touches_box):
+            self.state = self.stand
         super(Player, self).tick(level, ins, objects)
         self.x += self.velxd
         self.y += self.velyd
@@ -164,7 +186,6 @@ class Player(GameObject):
                 self.state = self.jumpr
         if ((not left and not right) or (left and right)):
             self.velx = self.velx / 1.8
-            self.state = self.stand
         if ins["keys"][pygame.K_w] and (self.touches_ground or self.touches_box):
             self.vely = -15
             self.state = self.jumpl
