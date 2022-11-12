@@ -13,7 +13,6 @@ blocks = {
 def load_level(index_string):
     image = Image.open("assets/lvl_data/lvl"+index_string+".png").convert("RGBA")
     level=[]
-    print("hello?")
     for y in range(0, 27):
         level_row=[]
         for x in range(0,48):
@@ -23,13 +22,3 @@ def load_level(index_string):
             level_row+=[blocks[hex_code]]
         level+=[level_row]
     return(level)
-
-for each in load_level("1"):
-    print(each)
-
-
-#   KEY:
-#   0   =   AIR
-#   1   =   GROUND
-#   2   =   START   (initial player position)
-#   3   =   FINISH  (level ends when player reaches here)
