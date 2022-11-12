@@ -63,7 +63,7 @@ class Controllable_Box(GameObject):
         self.h = h*40
         self.gravity = False
         self.collision = False
-        self.velx = 0.2
+        self.velx = 4
         self.me = pygame.image.load("./assets/art/lvl1/moveblock.png").convert_alpha()
 
     def render(self, screen, frame):
@@ -104,6 +104,8 @@ class Player(GameObject):
         self.walkr = [pygame.image.load("./assets/art/sprite/right walk 1.png").convert_alpha(), pygame.image.load("./assets/art/sprite/right walk 2.png").convert_alpha(), pygame.image.load("./assets/art/sprite/right walk 3.png").convert_alpha(), pygame.image.load("./assets/art/sprite/right walk 4.png").convert_alpha()]
         self.walkl = [pygame.image.load("./assets/art/sprite/left walk 1.png").convert_alpha(), pygame.image.load("./assets/art/sprite/left walk 2.png").convert_alpha(), pygame.image.load("./assets/art/sprite/left walk 3.png").convert_alpha(), pygame.image.load("./assets/art/sprite/left walk 4.png").convert_alpha()]
         self.state = self.stand
+        self.velxd = 0
+        self.velyd = 0
 
     def render(self, screen, frame):
         if self.state == self.walkl or self.state == self.walkr:
@@ -113,36 +115,54 @@ class Player(GameObject):
 
     def tick(self, level, ins, objects):
         super(Player, self).tick(level, ins, objects)
+        self.x += self.velxd
+        self.y += self.velyd
+        if not self.touches_box:
+            self.velxd /= 1.8
+            self.velyd /= 1.8
         player_tile = Level.pixel_to_tile(self.x, self.y)
-        if level.blocks[player_tile[0]][player_tile[1] + 2] == 1 or level.blocks[player_tile[0]+1][player_tile[1]+2] == 1:
+        self.touches_box = False
+        if player_tile[0] > 47:
+            level.level_index += 1
+        elif level.blocks[player_tile[0]][player_tile[1] + 2] == 1 or level.blocks[player_tile[0]+1][player_tile[1]+2] == 1:
             self.touches_ground = True
         else:
-            self.touches_box = False
             self.touches_ground = False
             for i in objects:
                 if isinstance(i, Controllable_Box):
                     if self.x <= i.x + i.w and self.x >= i.x - self.w and i.y - self.y - self.h <= 2 and i.y - self.y - self.h > -1:
                         self.touches_box = True
-                        self.velx = i.velx
+                        self.velxd = max(i.velx, self.velxd)
+                        self.velyd = max(i.vely, self.velyd)
+                        if self.velxd != i.velx:
+                            self.velxd /= 1.2
+                        if self.velyd != i.vely:
+                            self.velyd /= 1.2
                         break
 
 
         self.handle_input(ins)
 
     def handle_input(self, ins):
-        if ins["keys"][pygame.K_a]:
+        left, right, up, down = False, False, False, False
+        if self.velx > -10 and ins["keys"][pygame.K_a]:
+            left = True
+        if self.velx < 10 and ins["keys"][pygame.K_d]:
+            right = True
+
+        if left:
             self.velx = max(self.velx - 2, -12)
             if self.touches_ground or self.touches_box:
                 self.state = self.walkl
             else:
                 self.state = self.jumpl
-        if ins["keys"][pygame.K_d]:
+        if right:
             self.velx = min(self.velx + 2, 12)
             if self.touches_ground or self.touches_box:
                 self.state = self.walkr
             else:
                 self.state = self.jumpr
-        if ((not ins["keys"][pygame.K_d] and not ins["keys"][pygame.K_a]) or (ins["keys"][pygame.K_d] and ins["keys"][pygame.K_a])) and not self.touches_box:
+        if ((not left and not right) or (left and right)):
             self.velx = self.velx / 1.8
             self.state = self.stand
         if ins["keys"][pygame.K_w] and (self.touches_ground or self.touches_box):
