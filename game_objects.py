@@ -108,25 +108,27 @@ class Player(GameObject):
         super(Player, self).tick(level, ins, objects)
         self.x += self.velxd
         self.y += self.velyd
-       
+        if not self.touches_box:
+            self.velxd /= 1.8
+            self.velyd /= 1.8
         player_tile = Level.pixel_to_tile(self.x, self.y)
+        self.touches_box = False
         if player_tile[0] > 47:
             level.level_index += 1
         elif level.blocks[player_tile[0]][player_tile[1] + 2] == 1 or level.blocks[player_tile[0]+1][player_tile[1]+2] == 1:
             self.touches_ground = True
         else:
-            self.touches_box = False
             self.touches_ground = False
             for i in objects:
                 if isinstance(i, Controllable_Box):
                     if self.x <= i.x + i.w and self.x >= i.x - self.w and i.y - self.y - self.h <= 2 and i.y - self.y - self.h > -1:
                         self.touches_box = True
                         self.velxd = max(i.velx, self.velxd)
-                        self.velyd = i.vely
+                        self.velyd = max(i.vely, self.velyd)
                         if self.velxd != i.velx:
-                            self.velxd /= 1.8
+                            self.velxd /= 1.2
                         if self.velyd != i.vely:
-                            self.velyd /= 1.8
+                            self.velyd /= 1.2
                         break
 
 
