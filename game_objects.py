@@ -109,7 +109,7 @@ class Player(GameObject):
 
     def render(self, screen, frame):
         if self.state == self.walkl or self.state == self.walkr:
-            screen.blit(self.state[(frame / 12) % 4], (self.x - 22, self.y - 15))
+            screen.blit(self.state[(int(frame / 12)) % 4], (self.x - 22, self.y - 15))
         else:
             screen.blit(self.state, (self.x - 22, self.y - 15))
 
