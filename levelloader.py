@@ -12,9 +12,11 @@ blocks = {
 class Level_Loader:
     def __init__(self, index):
         self.level_image = Image.open("assets/lvl_data/lvl"+str(index)+".png").convert("RGBA")
-        self.startlocation = (-1,-1)
 
+        self.startlocation = (-1,-1)
+        self.boxes=[]
         self.level=[]
+
         for x in range(0, 48):
             level_column=[]
             for y in range(0,27):
@@ -23,6 +25,16 @@ class Level_Loader:
                 block=blocks[hex_code]
                 if block==2:
                     self.startlocation = (x*40,y*40)
+                if block==4:
+                    if (x==0 or self.level_image.getpixel((x-1, y))!=(0,0,255,255)) and (y==0 or self.level_image.getpixel((x, y-1))!=(0,0,255,255)):
+                        width=1
+                        height=1
+                        while x+width<48 and self.level_image.getpixel((x+width, y))==(0,0,255,255):
+                            width+=1
+                        while y.height<27 and self.level_image.getpixel((x, y+height))==(0,0,255,255):
+                            height+=1
+                        boxes+=[(x,y,width,height)]
+
                 level_column+=[block]
             self.level+=[level_column]
 
@@ -46,3 +58,6 @@ class Level_Loader:
 
     def player_initial_position(self, index):
         return self.startlocation
+
+    def box_initialisation(self, index):
+        return self.boxes
