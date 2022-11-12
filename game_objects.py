@@ -42,6 +42,16 @@ class GameObject:
         self.y += self.vely
         self.x += self.velx
 
+class Controllable_Box(GameObject):
+    def __init__(self, x, y):
+        super(Controllable_Box, self).__init__(x, y)
+        self.w = 80
+        self.h = 80
+        self.gravity = False
+
+        def render(self, screen):
+            pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(self.x, self.y, self.w, self.h))
+
 class Player(GameObject):
     def __init__(self, x, y):
         super(Player, self).__init__(x, y)
