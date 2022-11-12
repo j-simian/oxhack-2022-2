@@ -42,7 +42,7 @@ def game_loop():
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))
         level.draw_bg(screen, frame)
         for i in objects:
-            i.tick(level.blocks, { "keys": keys, "microbit": bit_keys }, objects)
+            i.tick(level, { "keys": keys, "microbit": bit_keys }, objects)
         for i in objects:
             i.render(screen)
         level.draw_mg(screen)

@@ -6,6 +6,7 @@ class Level:
     def __init__(self, index):
         self.loader = Level_Loader(1)
         self.blocks = self.loader.load_level(1)
+        self.bounding_boxes = self.loader.load_bounding_box(1)
         self.bg1 = pygame.image.load("./assets/art/background1.png").convert_alpha()
         self.bg2 = pygame.image.load("./assets/art/background2.png").convert_alpha()
         self.bg3 = pygame.image.load("./assets/art/background3.png").convert_alpha()
