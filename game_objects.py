@@ -24,29 +24,37 @@ class GameObject:
             self.vely = min(18, self.vely+0.7)
 
         if self.collision:
+            up_collided=False
+            down_collided=False
+            left_collided=False
+            right_collided=False
             for i in range(0, len(blocks)):
                 for j in range(0, len(blocks[i])):
                     collide = False
-                    if blocks[i][j] != 1 and blocks[i][j] != 3:
+                    if blocks[i][j] not in [1,3,5]:
                         continue
                     pixel = Level.tile_to_pixel(i, j)
                     if self.x+self.w <= pixel[0] and self.x+self.w + self.velx + self.velxd > pixel[0] and self.y + self.h > pixel[1] and self.y < pixel[1] + 40: #rightwards
                         collide = True
+                        right_collided=True
                         self.velx = 0
                         self.velxd = 0
                         self.x = pixel[0] - self.w - 1
                     if self.x >= pixel[0]+40 and self.x + self.velx + self.velxd < pixel[0]+40 and self.y + self.h > pixel[1] and self.y < pixel[1] + 40: #leftwards
                         collide = True
+                        left_collided=True
                         self.velx = 0
                         self.velxd = 0
                         self.x = pixel[0]+41
                     if self.y + self.h <= pixel[1] and self.y + self.vely + self.velyd + self.h > pixel[1] and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
                         collide = True
+                        down_collided=True
                         self.vely = 0
                         self.velyd = 0
                         self.y = pixel[1] - self.h
-                    if self.y >= pixel[1] + 40 and self.y + self.vely + self.velyd < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
+                    if self.y >= pixel[1] + 40 and self.y + self.vely + self.velyd < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #upwards
                         collide = True
+                        up_collided=True
                         self.vely = 0
                         self.velyd = 0
                         self.y = pixel[1] + 41
@@ -59,17 +67,23 @@ class GameObject:
                     for each in objects:
                         if isinstance(each, Controllable_Box):
                             if self.x+self.w <= each.x and self.x+self.w + self.velx > each.x and self.y + self.h > each.y and self.y < each.y + each.h: #rightwards
+                                right_collided=True
                                 self.velx = 0
                                 self.x = each.x - self.w - 1
                             if self.x >= each.x+each.w and self.x + self.velx < each.x+each.w and self.y + self.h > each.y and self.y < each.y + each.h: #leftwards
+                                left_collided=True
                                 self.velx = 0
                                 self.x = each.x+each.w+1
                             if self.y + self.h < each.y + 40 and self.y + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards
+                                down_collided=True
                                 self.vely = 0
                                 self.y = each.y - self.h
                             if self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x: #upwards
+                                up_collided=True
                                 self.vely = 0
                                 self.y = each.y + each.h+1
+
+            if (up_collided and down_collided) or (left_collided and right_collided): return 2
         self.y += self.vely
         self.x += self.velx
         return 0
@@ -131,6 +145,21 @@ class Controllable_Box(GameObject):
         self.x=max(self.x,0)
         self.y=min(self.y,1080-self.h)
         self.y=max(self.y,0)
+
+        for each in objects:
+            if isinstance(each, Player): #push player around
+                if self.x+self.w <= each.x and self.x+self.w + self.velx > each.x and self.y + self.h > each.y and self.y < each.y + each.h: #rightwards
+                    each.velx = max(each.velx,self.velx)
+                    each.x = self.x + self.w + 1
+                if self.x >= each.x+each.w and self.x + self.velx < each.x+each.w and self.y + self.h > each.y and self.y < each.y + each.h: #leftwards
+                    each.velx = min(each.velx,self.velx)
+                    each.x = self.x-each.w-1
+                # if self.y + self.h < each.y + 40 and self.y + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards
+                #     each.vely = max(each.vely,self.vely)
+                #     each.y = self.y + self.h + 1
+                # if self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x: #upwards
+                #     each.vely = min(each.vely,self.vely)
+                #     each.y = self.y - self.h - 1
 
 
 class Player(GameObject):
