@@ -42,11 +42,11 @@ def game_loop():
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))
         level.draw_bg(screen, frame)
         level.shooting_stars(screen, frame)
+        level.draw_mg(screen)
         for i in objects:
             i.tick(level, { "keys": keys, "microbit": bit_keys }, objects)
         for i in objects:
             i.render(screen, frame)
-        level.draw_mg(screen)
         level.draw_fg(screen)
         pygame.display.flip()
         for event in pygame.event.get():
