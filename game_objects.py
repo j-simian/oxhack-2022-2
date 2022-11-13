@@ -135,12 +135,12 @@ class Controllable_Box(GameObject):
                 if self.x >= pixel[0]+40 and self.x + self.velx < pixel[0]+40 and self.y + self.h > pixel[1] and self.y < pixel[1] + 40: #leftwards
                     self.velx = 0
                     self.x = pixel[0]+41
-                # if self.y + self.vely + self.h < pixel[1] + 41 and self.y + self.vely + self.h > pixel[1] and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
-                #     self.vely = 0
-                #     self.y = pixel[1] - self.h - 1
-                # if self.y >= pixel[1] + 40 and self.y + self.vely < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #up
-                #     self.vely = 0
-                #     self.y = pixel[1] + 41
+                if self.y + self.vely + self.h < pixel[1] + 41 and self.y + self.vely + self.h > pixel[1] and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
+                    self.vely = 0
+                    self.y = pixel[1] - self.h - 1
+                if self.y >= pixel[1] + 40 and self.y + self.vely < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #up
+                    self.vely = 0
+                    self.y = pixel[1] + 41
         self.x=min(self.x,1920-self.w)
         self.x=max(self.x,0)
         self.y=min(self.y,1080-self.h)
@@ -154,12 +154,12 @@ class Controllable_Box(GameObject):
                 if self.x >= each.x+each.w and self.x + self.velx < each.x+each.w and self.y + self.h > each.y and self.y < each.y + each.h: #leftwards
                     each.velx = min(each.velx,self.velx)
                     each.x = self.x-each.w-1
-                if self.y + self.h < each.y + 40 and self.y + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards
-                    each.vely = max(each.vely,self.vely)
-                    each.y = self.y + self.h + 1
-                if self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x: #upwards
-                    each.vely = min(each.vely,self.vely)
-                    each.y = self.y - self.h - 1
+                # if self.y + self.h < each.y + 40 and self.y + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards
+                #     each.vely = max(each.vely,self.vely)
+                #     each.y = self.y + self.h + 1
+                # if self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x: #upwards
+                #     each.vely = min(each.vely,self.vely)
+                #     each.y = self.y - self.h - 1
 
 
 class Player(GameObject):
