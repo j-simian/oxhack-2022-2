@@ -93,6 +93,13 @@ def game_loop():
                     continue
                 for i in objects:
                     i.render(screen, frame)
+                if levelnumber == 13:
+                    font = pygame.font.Font('freesansbold.ttf', 144)
+                    text = font.render(str(death_counter), True, "#E9A7A3FF")
+                    textRect = text.get_rect()
+                    textRect.center = (1450,170)
+                    screen.blit(text, textRect)
+
                 level.draw_fg(screen)
                 if alpha > 0: 
                     alpha = max(0, alpha -5)  
@@ -110,6 +117,8 @@ def game_loop():
         if levelWon: 
             levelnumber += 1
             start = False
+            if levelnumber == 14:
+                running = 0; exit()
             level = Level(levelnumber)
         player = game_objects.Player(level.player_position[0], level.player_position[1])
         objects = [player]
