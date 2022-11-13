@@ -8,6 +8,8 @@ class GameObject:
         self.y = y
         self.vely = 0
         self.velx = 0
+        self.velxd = 0
+        self.velyd = 0
         self.gravity = False
         self.collision = True
         self.touches_ground = False
@@ -27,17 +29,21 @@ class GameObject:
                     if blocks[i][j] != 1:
                         continue
                     pixel = Level.tile_to_pixel(i, j)
-                    if self.x+self.w <= pixel[0] and self.x+self.w + self.velx > pixel[0] and self.y + self.h > pixel[1] and self.y < pixel[1] + 40: #rightwards
+                    if self.x+self.w <= pixel[0] and self.x+self.w + self.velx + self.velxd > pixel[0] and self.y + self.h > pixel[1] and self.y < pixel[1] + 40: #rightwards
                         self.velx = 0
+                        self.velxd = 0
                         self.x = pixel[0] - self.w - 1
-                    if self.x >= pixel[0]+40 and self.x + self.velx < pixel[0]+40 and self.y + self.h > pixel[1] and self.y < pixel[1] + 40: #leftwards
+                    if self.x >= pixel[0]+40 and self.x + self.velx + self.velxd < pixel[0]+40 and self.y + self.h > pixel[1] and self.y < pixel[1] + 40: #leftwards
                         self.velx = 0
+                        self.velxd = 0
                         self.x = pixel[0]+41
-                    if self.y + self.h <= pixel[1] and self.y + self.vely + self.h > pixel[1] and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
+                    if self.y + self.h <= pixel[1] and self.y + self.vely + self.velyd + self.h > pixel[1] and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
                         self.vely = 0
+                        self.velyd = 0
                         self.y = pixel[1] - self.h
-                    if self.y >= pixel[1] + 40 and self.y + self.vely < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
+                    if self.y >= pixel[1] + 40 and self.y + self.vely + self.velyd < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
                         self.vely = 0
+                        self.velyd = 0
                         self.y = pixel[1] + 41
 
                     for each in objects:
@@ -196,7 +202,7 @@ class Player(GameObject):
         if ins["keys"][pygame.K_w] and (self.touches_ground or self.touches_box):
             self.vely = -15
             self.state = self.jumpul
-            self.velyd *= 3
-            self.velxd *= 3
+            self.velyd *= 4
+            self.velxd *= 4
         if ins["keys"][pygame.K_e]:
             self.vely = -15
