@@ -202,7 +202,7 @@ class Player(GameObject):
         if ins["keys"][pygame.K_w] and (self.touches_ground or self.touches_box):
             self.vely = -15
             self.state = self.jumpul
-            self.velyd *= 4
-            self.velxd *= 4
+            self.velyd *= 2
+            self.velxd *= 2
         if ins["keys"][pygame.K_e]:
             self.vely = -15
