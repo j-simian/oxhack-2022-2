@@ -9,6 +9,7 @@ dead = False
 class Level:
     def __init__(self, levelnumber):
         self.level_index = levelnumber
+        self.level_menu = pygame.image.load("./assets/startscreens/lvl" + str(self.level_index) + "n.png").convert_alpha()
         self.loader = Level_Loader(self.level_index)
         self.blocks = self.loader.load_level(self.level_index)
         self.bounding_boxes = self.loader.load_bounding_box(self.level_index)
