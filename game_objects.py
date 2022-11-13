@@ -169,7 +169,7 @@ class Player(GameObject):
 
     def render(self, screen, frame):
         if self.state == self.walkl or self.state == self.walkr:
-            screen.blit(self.state[(int(frame / 9)) % 4], (self.x - 22, self.y - 15))
+            screen.blit(self.state[(int(frame / 10)) % 4], (self.x - 22, self.y - 15))
         else:
             screen.blit(self.state, (self.x - 22, self.y - 15))
 
@@ -196,14 +196,11 @@ class Player(GameObject):
                         self.velyd = i.vely
                         break
 
-        if self.velx > 0 and self.vely > 0:
-            self.state = self.jumpdr
-        elif self.velx <= 0 and self.vely > 0:
+        if self.state == self.jumpul and self.vely > 0:
             self.state = self.jumpdl
-        elif self.velx > 0 and self.vely < 0:
-            self.state = self.jumpur
-        elif self.velx <= 0 and self.vely < 0:
-            self.state = self.jumpul
+        if self.state == self.jumpur and self.vely > 0:
+            self.state = self.jumpdr
+    
         
         ret = super(Player, self).tick(level, ins, objects)
         if ret == 1:
@@ -219,7 +216,7 @@ class Player(GameObject):
         self.handle_input(ins)
 
     def handle_input(self, ins):
-        left, right, up, down = False, False, False, False
+        left, right = False, False
         if self.velx > -10 and ins["keys"][pygame.K_a]:
             left = True
         if self.velx < 10 and ins["keys"][pygame.K_d]:
@@ -230,13 +227,19 @@ class Player(GameObject):
             if self.touches_ground or self.touches_box:
                 self.state = self.walkl
             else:
-                self.state = self.jumpul
+                if self.vely > 0:
+                    self.state = self.jumpdl
+                elif self.vely < 0:
+                    self.state = self.jumpul
         if right:
             self.velx = min(self.velx + 2, 12)
             if self.touches_ground or self.touches_box:
                 self.state = self.walkr
             else:
-                self.state = self.jumpur
+                if self.vely > 0:
+                    self.state = self.jumpdr
+                elif self.vely < 0:
+                    self.state = self.jumpur
         if ((not left and not right) or (left and right)):
             if self.touches_ground or self.touches_box:
                 self.velx /= 1.8
