@@ -13,7 +13,7 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.flip()
 
 
-levelnumber = 5
+levelnumber = 12
 objects = []
 keys = []
 bit_keys = []
@@ -57,6 +57,8 @@ def game_loop():
                 for event in pygame.event.get():
                     if event.type == pygame.KEYDOWN:
                         start = True
+                    elif event.type == pygame.QUIT:
+                        running = 0; exit()
 
             else:
                 # render
