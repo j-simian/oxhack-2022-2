@@ -53,7 +53,8 @@ def game_loop():
             bit_keys = ()
             roll, pitch, a, b = microbit.bitman(roll, pitch)
             bit_keys=(roll, pitch, a, b)
-
+            if a:
+                level.add_star()
             if not start and levelnumber != 0:
                 image = level.level_menu
                 if alpha < 253: alpha += 2
@@ -69,10 +70,9 @@ def game_loop():
 
             else:
                 # render
-
                 pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))
                 level.draw_bg(screen, frame)
-                level.shooting_stars(screen, frame)
+                level.render_star(screen, frame)
                 level.draw_mg(screen)
                 for i in objects:
                     state = i.tick(level, { "keys": keys, "microbit": bit_keys }, objects)
