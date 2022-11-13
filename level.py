@@ -26,9 +26,7 @@ class Level:
         self.stary = -100
         for i in range(0, 4):
             self.stars += [pygame.image.load("./assets/art/shooting_star_" + str(i+1) + ".png").convert_alpha()]
-        self.star_timings = []
-        for i in range(0, 6):
-            self.star_timings.append(random.uniform(5, 12))
+        self.currstars = []
 
     def draw_bg(self, screen, frame):
         bg_img = self.bg1 if (frame // 20) % 3 == 0 else self.bg2 if (frame // 20) % 3 == 1 else self.bg3
@@ -44,9 +42,19 @@ class Level:
     def draw_mg(self, screen):
         screen.blit(self.mg, (0, 0))
 
-    def shooting_stars(self, screen, frame):
-        if (frame % 60) in self.star_timings:
-            screen.blit(self.stars[random.uniform(0, 3)], (200, 200))
+    def add_star(self):
+        self.currstars += [[random.choice(self.stars), random.uniform(760, 1060), -100, False]]
+
+
+    def render_star(self, screen, frame):
+        for i in self.currstars:
+            i[1] -= 2
+            i[2] += 2
+            screen.blit(i[0], (i[1], i[2]))
+            if i[2] > 1080:
+                i[3] = True
+        self.currstars = filter(lambda x: not x[3], self.currstars)
+
 
     @staticmethod
     def pixel_to_tile(x, y):
