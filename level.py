@@ -4,6 +4,7 @@ import math
 import random
 
 levelWon = False
+dead = False
 
 class Level:
     def __init__(self, levelnumber):
