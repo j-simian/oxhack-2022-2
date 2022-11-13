@@ -26,7 +26,7 @@ for each in level.boxes:
 clock = pygame.time.Clock()
 start = False
 
-
+death_counter = 0
 
 ROLL = 512
 PITCH = 513
@@ -35,7 +35,7 @@ BIT_B = 515
 
 
 def game_loop():
-    global level, objects, levelWon, levelnumber, dead, start
+    global level, objects, levelWon, levelnumber, dead, start, death_counter
     frame = 0
     running = 1
     roll, pitch = 0, 0
@@ -87,6 +87,7 @@ def game_loop():
                         elif rand <= 66: image = death2
                         elif rand <= 99: image = death3
                         else: image = death4
+                        death_counter += 1
                         continue
                 if levelWon or dead:
                     continue
