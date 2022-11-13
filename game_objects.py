@@ -45,7 +45,7 @@ class GameObject:
                         self.vely = 0
                         self.velyd = 0
                         self.y = pixel[1] - self.h
-                    if self.y >= pixel[1] + 40 and self.y + self.vely + self.velyd < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
+                    if self.y >= pixel[1] + 40 and self.y + self.vely + self.velyd < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #upwards
                         collide = True
                         self.vely = 0
                         self.velyd = 0
