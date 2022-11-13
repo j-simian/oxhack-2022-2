@@ -1,9 +1,9 @@
 import serial
 
-# s_inst = serial.Serial()
-# s_inst.baudrate = 115200
-# s_inst.port ='COM3'
-# s_inst.open()
+s_inst = serial.Serial()
+s_inst.baudrate = 115200
+s_inst.port ='COM3'
+s_inst.open()
 
 
 def bitman(roll, pitch):

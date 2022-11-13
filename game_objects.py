@@ -48,7 +48,7 @@ class GameObject:
                             if self.x >= each.x+each.w and self.x + self.velx < each.x+each.w and self.y + self.h > each.y and self.y < each.y + each.h: #leftwards
                                 self.velx = 0
                                 self.x = each.x+each.w+1
-                            if self.y + self.h <= each.y and self.y + self.vely + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards
+                            if self.y + self.h < each.y + 40 and self.y + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards
                                 self.vely = 0
                                 self.y = each.y - self.h
                             if self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x: #upwards
@@ -64,7 +64,7 @@ class Controllable_Box(GameObject):
         self.h = h*40
         self.gravity = False
         self.collision = False
-        self.velx = 4
+        self.velx = 0
         self.me = pygame.image.load("./assets/art/lvl1/moveblock.png").convert_alpha()
 
     def render(self, screen, frame):
@@ -104,7 +104,7 @@ class Controllable_Box(GameObject):
                 if self.x >= pixel[0]+40 and self.x + self.velx < pixel[0]+40 and self.y + self.h > pixel[1] and self.y < pixel[1] + 40: #leftwards
                     self.velx = 0
                     self.x = pixel[0]+41
-                if self.y + self.h <= pixel[1] and self.y + self.vely + self.h > pixel[1] and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
+                if self.y + self.vely + self.h < pixel[1] + 41 and self.y + self.vely + self.h > pixel[1] and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
                     self.vely = 0
                     self.y = pixel[1] - self.h - 1
                 if self.y >= pixel[1] + 40 and self.y + self.vely < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #up
@@ -139,8 +139,7 @@ class Player(GameObject):
         if abs(self.velx) < 1 and (self.touches_ground or self.touches_box):
             self.state = self.stand
         super(Player, self).tick(level, ins, objects)
-        self.x += self.velxd
-        self.y += self.velyd
+        
         if not (self.touches_box and self.touches_ground):
             self.velxd /= 1.05
             self.velyd /= 1.05
@@ -154,7 +153,7 @@ class Player(GameObject):
             self.touches_ground = False
             for i in objects:
                 if isinstance(i, Controllable_Box):
-                    if self.x <= i.x + i.w and self.x >= i.x - self.w and i.y - self.y - self.h <= 2 and i.y - self.y - self.h > -1:
+                    if self.x <= i.x + i.w and self.x >= i.x - self.w and i.y - self.y - self.h <= 2 and i.y - self.y - self.h > -79 + self.velyd:
                         self.touches_box = True
                         self.velxd = i.velx
                         self.velyd = i.vely
@@ -163,6 +162,9 @@ class Player(GameObject):
                         # if self.velyd != i.vely:
                         #     self.velyd /= 1.8
                         break
+        self.x += self.velxd
+        self.y += min(self.velyd, 0)
+       
 
 
         self.handle_input(ins)

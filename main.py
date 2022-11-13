@@ -28,15 +28,15 @@ BIT_B = 515
 
 
 def game_loop():
-    frame = 0
+    frame = 0   
     running = 1
     roll, pitch = 0, 0
     while running:
         keys=pygame.key.get_pressed()
 
         bit_keys = ()
-        # roll, pitch, a, b = microbit.bitman(roll, pitch)
-        # bit_keys=(roll, pitch, a, b)
+        roll, pitch, a, b = microbit.bitman(roll, pitch)
+        bit_keys=(roll, pitch, a, b)
 
         # render
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))
