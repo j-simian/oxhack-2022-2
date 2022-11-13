@@ -278,5 +278,3 @@ class Player(GameObject):
             self.state = self.jumpul
             self.velyd *= 2
             self.velxd *= 2
-        if ins["keys"][pygame.K_e]:
-            self.vely = -15
