@@ -6,7 +6,7 @@ from level import Level
 
 (width, height) = (1920, 1080)
 
-pygame.display.set_caption("oxsplat")
+pygame.display.set_caption("City of Dreaming Spires")
 pygame.init()
 screen = pygame.display.set_mode((width, height))
 pygame.display.flip()
