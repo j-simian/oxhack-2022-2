@@ -13,10 +13,11 @@ pygame.display.flip()
 
 player = game_objects.Player(100, 100)
 
+levelnumber = 1
 objects = [player]
 keys = []
 bit_keys = []
-level = Level(1)
+level = Level(levelnumber)
 for each in level.boxes:
     objects+=[game_objects.Controllable_Box(each[0],each[1],each[2],each[3])]
 clock = pygame.time.Clock()
@@ -28,7 +29,7 @@ BIT_B = 515
 
 
 def game_loop():
-    frame = 0   
+    frame = 0
     running = 1
     roll, pitch = 0, 0
     while running:

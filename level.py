@@ -4,8 +4,7 @@ import math
 import random
 
 class Level:
-    def __init__(self, index):
-        self.level_index = 1
+    def __init__(self, level_index):
         self.loader = Level_Loader(self.level_index)
         self.blocks = self.loader.load_level(self.level_index)
         self.bounding_boxes = self.loader.load_bounding_box(self.level_index)
