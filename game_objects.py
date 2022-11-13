@@ -71,7 +71,7 @@ class Controllable_Box(GameObject):
         self.gravity = False
         self.collision = False
         self.velx = 0
-        self.me = pygame.image.load("./assets/art/lvl" + str(self.levelnumber) + "/moveblock.png").convert_alpha()
+        self.me = pygame.image.load("./assets/art/lvl" + str(levelnumber) + "/moveblock.png").convert_alpha()
 
     def render(self, screen, frame):
         screen.blit(self.me, (self.x - 28, self.y - 19))
