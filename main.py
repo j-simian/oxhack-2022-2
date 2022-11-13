@@ -89,7 +89,7 @@ def game_loop():
         level = Level(levelnumber)
         player = game_objects.Player(level.player_position[0], level.player_position[1])
         objects = [player]
-        levelWon, dead = False, False
+        start, levelWon, dead = False, False, False
         for each in level.boxes:
             objects+=[game_objects.Controllable_Box(each[0],each[1],each[2],each[3], levelnumber)]
 
