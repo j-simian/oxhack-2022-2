@@ -11,7 +11,10 @@ def bitman(roll, pitch):
     packet = None
 
     if s_inst.in_waiting:
-        packet = s_inst.readline().decode('utf')
+        try:
+            packet = s_inst.readline().decode('utf')
+        except:
+            packet = s_inst.readline().decode('utf')
 
     if packet:
         packet = packet.strip().split()

@@ -226,6 +226,15 @@ class Player(GameObject):
                         self.velyd = i.vely
                         break
 
+        if self.velx > 0 and self.vely > 0:
+            self.state = self.jumpdr
+        elif self.velx <= 0 and self.vely > 0:
+            self.state = self.jumpdl
+        elif self.velx > 0 and self.vely < 0:
+            self.state = self.jumpur
+        elif self.velx <= 0 and self.vely < 0:
+            self.state = self.jumpul
+        
         ret = super(Player, self).tick(level, ins, objects)
         if ret == 1:
             return 1
