@@ -129,6 +129,21 @@ class Controllable_Box(GameObject):
         self.y=min(self.y,1080-self.h)
         self.y=max(self.y,0)
 
+        for each in objects:
+            if isinstance(each, Player):
+                if self.x+self.w <= each.x and self.x+self.w + self.velx > each.x and self.y + self.h > each.y and self.y < each.y + each.h: #rightwards
+                    each.velx = max(each.velx,self.velx)
+                    each.x = self.x + self.w + 1
+                if self.x >= each.x+each.w and self.x + self.velx < each.x+each.w and self.y + self.h > each.y and self.y < each.y + each.h: #leftwards
+                    each.velx = min(each.velx,self.velx)
+                    each.x = self.x-each.w-1
+                if self.y + self.h < each.y + 40 and self.y + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards
+                    each.vely = max(each.vely,self.vely)
+                    each.y = self.y + self.h + 1
+                if self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x: #upwards
+                    each.vely = min(each.vely,self.vely)
+                    each.y = self.y - self.h - 1
+
 
 class Player(GameObject):
     def __init__(self, x, y):
