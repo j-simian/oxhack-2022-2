@@ -57,6 +57,8 @@ def game_loop():
                 for event in pygame.event.get():
                     if event.type == pygame.KEYDOWN:
                         start = True
+                    elif event.type == pygame.QUIT:
+                        running = 0; exit()
 
             else:
                 # render
