@@ -19,7 +19,7 @@ keys = []
 bit_keys = []
 level = Level(levelnumber)
 for each in level.boxes:
-    objects+=[game_objects.Controllable_Box(each[0],each[1],each[2],each[3])]
+    objects+=[game_objects.Controllable_Box(each[0],each[1],each[2],each[3], levelnumber)]
 clock = pygame.time.Clock()
 
 ROLL = 512

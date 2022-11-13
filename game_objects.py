@@ -64,14 +64,14 @@ class GameObject:
         self.x += self.velx
 
 class Controllable_Box(GameObject):
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, w, h, levelnumber):
         super(Controllable_Box, self).__init__(x*40, y*40)
         self.w = w*40
         self.h = h*40
         self.gravity = False
         self.collision = False
         self.velx = 0
-        self.me = pygame.image.load("./assets/art/lvl1/moveblock.png").convert_alpha()
+        self.me = pygame.image.load("./assets/art/lvl" + str(self.levelnumber) + "/moveblock.png").convert_alpha()
 
     def render(self, screen, frame):
         screen.blit(self.me, (self.x - 28, self.y - 19))
@@ -87,7 +87,7 @@ class Controllable_Box(GameObject):
             tiltx=min(-5+roll,60)
         else:
             tiltx=0
-        
+
         if pitch<-5:
             tilty=max(5+pitch,-60)
         elif pitch>5:
@@ -145,7 +145,7 @@ class Player(GameObject):
         if abs(self.velx) < 1 and (self.touches_ground or self.touches_box):
             self.state = self.stand
         super(Player, self).tick(level, ins, objects)
-        
+
         if not (self.touches_box and self.touches_ground):
             self.velxd /= 1.05
             self.velyd /= 1.05
@@ -170,7 +170,7 @@ class Player(GameObject):
                         break
         self.x += self.velxd
         self.y += min(self.velyd, 0)
-       
+
 
 
         self.handle_input(ins)
