@@ -2,7 +2,7 @@ import pygame
 import game_objects
 import microbit
 from PIL import Image
-from level import Level
+from level import Level, levelWon
 
 (width, height) = (1920, 1080)
 
@@ -32,28 +32,30 @@ def game_loop():
     running = 1
     roll, pitch = 0, 0
     while running:
-        keys=pygame.key.get_pressed()
+        while not levelWon:
+            keys=pygame.key.get_pressed()
 
-        bit_keys = ()
-        roll, pitch, a, b = microbit.bitman(roll, pitch)
-        bit_keys=(roll, pitch, a, b)
+            bit_keys = ()
+            # roll, pitch, a, b = microbit.bitman(roll, pitch)
+            # bit_keys=(roll, pitch, a, b)
 
-        # render
-        pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))
-        level.draw_bg(screen, frame)
-        level.shooting_stars(screen, frame)
-        level.draw_mg(screen)
-        for i in objects:
-            i.tick(level, { "keys": keys, "microbit": bit_keys }, objects)
-        for i in objects:
-            i.render(screen, frame)
-        level.draw_fg(screen)
-        pygame.display.flip()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = 0
-        clock.tick(60)
-        frame += 1
+            # render
+            pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))
+            level.draw_bg(screen, frame)
+            level.shooting_stars(screen, frame)
+            level.draw_mg(screen)
+            for i in objects:
+                i.tick(level, { "keys": keys, "microbit": bit_keys }, objects)
+            for i in objects:
+                i.render(screen, frame)
+            level.draw_fg(screen)
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = 0
+            clock.tick(60)
+            frame += 1
+
 
 
 
