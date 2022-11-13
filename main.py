@@ -13,7 +13,7 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.flip()
 
 
-levelnumber = 5
+levelnumber = 1
 keys = []
 bit_keys = []
 level = Level(levelnumber)
