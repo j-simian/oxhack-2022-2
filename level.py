@@ -6,8 +6,8 @@ import random
 levelWon = False
 
 class Level:
-    def __init__(self, index):
-        self.level_index = 1
+    def __init__(self, levelnumber):
+        self.level_index = levelnumber
         self.loader = Level_Loader(self.level_index)
         self.blocks = self.loader.load_level(self.level_index)
         self.bounding_boxes = self.loader.load_bounding_box(self.level_index)
@@ -17,8 +17,8 @@ class Level:
         self.player_position = self.loader.player_initial_position(self.level_index)
         self.boxes = self.loader.box_initialisation(self.level_index)
         self.radcam = pygame.image.load("./assets/art/background_radcam.png").convert_alpha()
-        self.fg = pygame.image.load("./assets/art/lvl1/foreground.png").convert_alpha()
-        self.mg = pygame.image.load("./assets/art/lvl1/midground.png").convert_alpha()
+        self.fg = pygame.image.load("./assets/art/lvl" + str(self.level_index) + "/foreground.png").convert_alpha()
+        self.mg = pygame.image.load("./assets/art/lvl" + str(self.level_index) + "/midground.png").convert_alpha()
         self.stars = []
         self.starx = 960
         self.stary = -100

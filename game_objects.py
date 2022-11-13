@@ -27,7 +27,7 @@ class GameObject:
             for i in range(0, len(blocks)):
                 for j in range(0, len(blocks[i])):
                     collide = False
-                    if blocks[i][j] != 1 or blocks[i][j] == 3:
+                    if blocks[i][j] != 1 and blocks[i][j] != 3:
                         continue
                     pixel = Level.tile_to_pixel(i, j)
                     if self.x+self.w <= pixel[0] and self.x+self.w + self.velx + self.velxd > pixel[0] and self.y + self.h > pixel[1] and self.y < pixel[1] + 40: #rightwards
@@ -50,8 +50,8 @@ class GameObject:
                         self.vely = 0
                         self.velyd = 0
                         self.y = pixel[1] + 41
-                    if collide:
-                        levelWon = True
+                    if collide and blocks[i][j] == 3:
+                        return 1
 
                     for each in objects:
                         if isinstance(each, Controllable_Box):
@@ -69,16 +69,17 @@ class GameObject:
                                 self.y = each.y + each.h+1
         self.y += self.vely
         self.x += self.velx
+        return 0
 
 class Controllable_Box(GameObject):
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, w, h, levelnumber):
         super(Controllable_Box, self).__init__(x*40, y*40)
         self.w = w*40
         self.h = h*40
         self.gravity = False
         self.collision = False
         self.velx = 0
-        self.me = pygame.image.load("./assets/art/lvl1/moveblock.png").convert_alpha()
+        self.me = pygame.image.load("./assets/art/lvl" + str(levelnumber) + "/moveblock.png").convert_alpha()
 
     def render(self, screen, frame):
         screen.blit(self.me, (self.x - 28, self.y - 19))
@@ -151,8 +152,9 @@ class Player(GameObject):
     def tick(self, level, ins, objects):
         if abs(self.velx) < 1 and (self.touches_ground or self.touches_box):
             self.state = self.stand
-        super(Player, self).tick(level, ins, objects)
-        
+        if super(Player, self).tick(level, ins, objects) == 1:
+            return 1
+
         if not (self.touches_box and self.touches_ground):
             self.velxd /= 1.05
             self.velyd /= 1.05
@@ -177,7 +179,7 @@ class Player(GameObject):
                         break
         self.x += self.velxd
         self.y += min(self.velyd, 0)
-       
+
 
 
         self.handle_input(ins)
@@ -209,7 +211,7 @@ class Player(GameObject):
         if ins["keys"][pygame.K_w] and (self.touches_ground or self.touches_box):
             self.vely = -15
             self.state = self.jumpul
-            self.velyd *= 4
-            self.velxd *= 4
+            self.velyd *= 2
+            self.velxd *= 2
         if ins["keys"][pygame.K_e]:
             self.vely = -15

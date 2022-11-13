@@ -15,7 +15,7 @@ def bitman(roll, pitch):
 
     if packet:
         packet = packet.strip().split()
-        
+
         if len(packet) == 1:
             if packet[0] == 'A':
                 a = True
@@ -31,4 +31,4 @@ def bitman(roll, pitch):
             if direction == "PITCH":
                 pitch = int(magnitude)
 
-    return roll, pitch, a, b    
+    return roll, pitch, a, b

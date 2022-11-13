@@ -6,19 +6,21 @@ from level import Level, levelWon
 
 (width, height) = (1920, 1080)
 
-pygame.display.set_caption("oxsplat")
+
+pygame.display.set_caption("City of Dreaming Spires")
 pygame.init()
 screen = pygame.display.set_mode((width, height))
 pygame.display.flip()
 
 player = game_objects.Player(100, 100)
 
+levelnumber = 1
 objects = [player]
 keys = []
 bit_keys = []
-level = Level(1)
+level = Level(levelnumber)
 for each in level.boxes:
-    objects+=[game_objects.Controllable_Box(each[0],each[1],each[2],each[3])]
+    objects+=[game_objects.Controllable_Box(each[0],each[1],each[2],each[3], levelnumber)]
 clock = pygame.time.Clock()
 
 ROLL = 512
@@ -28,7 +30,8 @@ BIT_B = 515
 
 
 def game_loop():
-    frame = 0   
+    global level, objects, levelWon, levelnumber
+    frame = 0
     running = 1
     roll, pitch = 0, 0
     while running:
@@ -45,7 +48,11 @@ def game_loop():
             level.shooting_stars(screen, frame)
             level.draw_mg(screen)
             for i in objects:
-                i.tick(level, { "keys": keys, "microbit": bit_keys }, objects)
+                if i.tick(level, { "keys": keys, "microbit": bit_keys }, objects) == 1:
+                    levelWon = True
+                    continue
+            if levelWon:
+                continue
             for i in objects:
                 i.render(screen, frame)
             level.draw_fg(screen)
@@ -55,7 +62,14 @@ def game_loop():
                     running = 0
             clock.tick(60)
             frame += 1
-
+        print('WINWINWC')
+        levelnumber += 1
+        level = Level(levelnumber)
+        player = game_objects.Player(100, 100)
+        objects = [player]
+        levelWon = False
+        for each in level.boxes:
+            objects+=[game_objects.Controllable_Box(each[0],each[1],each[2],each[3], levelnumber)]
 
 
 
