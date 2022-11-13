@@ -74,7 +74,7 @@ class GameObject:
                                 left_collided=True
                                 self.velx = 0
                                 self.x = each.x+each.w+1
-                            if self.y + self.h < each.y + 40 and self.y + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards
+                            if self.y + self.h < each.y + 40 and self.y + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards - should there be a self.vely in here???
                                 down_collided=True
                                 self.vely = 0
                                 self.y = each.y - self.h
