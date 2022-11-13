@@ -27,7 +27,7 @@ class GameObject:
             for i in range(0, len(blocks)):
                 for j in range(0, len(blocks[i])):
                     collide = False
-                    if blocks[i][j] != 1 and blocks[i][j] != 3:
+                    if blocks[i][j] not in [1,3,5]:
                         continue
                     pixel = Level.tile_to_pixel(i, j)
                     if self.x+self.w <= pixel[0] and self.x+self.w + self.velx + self.velxd > pixel[0] and self.y + self.h > pixel[1] and self.y < pixel[1] + 40: #rightwards
