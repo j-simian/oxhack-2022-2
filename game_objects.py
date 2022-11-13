@@ -13,33 +13,37 @@ class GameObject:
         self.gravity = False
         self.collision = True
         self.touches_ground = False
+        self.alive=True
 
     def render(self, screen, frame):
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(self.x, self.y, 16, 32))
 
     def tick(self, level, ins, objects):
+        if self.alive==False: return 2
+
         blocks=level.blocks
 
         if self.gravity:
             self.vely = min(18, self.vely+0.7)
 
         if self.collision:
+            
+            for each in objects:
+                if isinstance(each, Controllable_Box):
+                    if self.x+self.w <= each.x and self.x+self.w + self.velx > each.x and self.y + self.h > each.y and self.y < each.y + each.h: #rightwards
+                        self.velx = 0
+                        self.x = each.x - self.w - 1
+                    if self.x >= each.x+each.w and self.x + self.velx < each.x+each.w and self.y + self.h > each.y and self.y < each.y + each.h: #leftwards
+                        self.velx = 0
+                        self.x = each.x+each.w+1
+                    if self.y + self.h < each.y + 40 and self.y + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards - should there be a self.vely in here???
+                        self.vely=max(0,each.vely)
+                        self.y = each.y - self.h
+                    if self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x: #upwards
+                        self.vely = 0
+                        self.y = each.y + each.h+1
             for i in range(0, len(blocks)):
                 for j in range(0, len(blocks[i])):
-                    for each in objects:
-                        if isinstance(each, Controllable_Box):
-                            if self.x+self.w <= each.x and self.x+self.w + self.velx > each.x and self.y + self.h > each.y and self.y < each.y + each.h: #rightwards
-                                self.velx = 0
-                                self.x = each.x - self.w - 1
-                            if self.x >= each.x+each.w and self.x + self.velx < each.x+each.w and self.y + self.h > each.y and self.y < each.y + each.h: #leftwards
-                                self.velx = 0
-                                self.x = each.x+each.w+1
-                            if self.y + self.h < each.y + 40 and self.y + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards - should there be a self.vely in here???
-                                self.vely = max(0,each.vely)
-                                self.y = each.y - self.h
-                            if self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x: #upwards
-                                self.vely = 0
-                                self.y = each.y + each.h+1
 
                     collide = False
                     if blocks[i][j] not in [1,3,5]:
@@ -141,12 +145,38 @@ class Controllable_Box(GameObject):
                 if self.x >= each.x+each.w and self.x + self.velx < each.x+each.w and self.y + self.h > each.y and self.y < each.y + each.h: #leftwards
                     each.velx = min(each.velx,self.velx)
                     each.x = self.x-each.w-1
-                # if self.y + self.h < each.y + 40 and self.y + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards
-                #     each.vely = max(each.vely,self.vely)
-                #     each.y = self.y + self.h + 1
-                # if self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x: #upwards
+                if self.y + self.h < each.y + 40 and self.y + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards
+                    each.vely = max(each.vely,self.vely)
+                    each.y = self.y + self.h + 1
+                # if (self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x): #not upwards
                 #     each.vely = min(each.vely,self.vely)
                 #     each.y = self.y - self.h - 1
+                blocks=level.blocks #test if player is now in a box
+                for i in range(0, len(blocks)):
+                    for j in range(0, len(blocks[i])):
+                        if blocks[i][j] != 1:
+                            continue
+                        pixel = Level.tile_to_pixel(i, j)
+                        x1=each.x
+                        y1=each.y
+                        x2=x1+each.w
+                        y2=y1+each.h
+
+                        x3=pixel[0]
+                        y3=pixel[1]
+                        x4=x3+40
+                        y4=y3+40
+                        if (x1+20<x4)and(x3+20<x2)and(y1+20<y4)and(y3+20<y2):
+                            print("a")
+                            each.alive=False
+
+                        x5=self.x
+                        y5=self.y
+                        x6=x5+self.w
+                        y6=y5+self.h
+                        if (x1+20<x6)and(x5+20<x2)and(y1+20<y6)and(y5+20<y2):
+                            print("b")
+                            each.alive=False
 
 
 class Player(GameObject):
@@ -169,7 +199,7 @@ class Player(GameObject):
 
     def render(self, screen, frame):
         if self.state == self.walkl or self.state == self.walkr:
-            screen.blit(self.state[(int(frame / 9)) % 4], (self.x - 22, self.y - 15))
+            screen.blit(self.state[(int(frame / 10)) % 4], (self.x - 22, self.y - 15))
         else:
             screen.blit(self.state, (self.x - 22, self.y - 15))
 
@@ -196,14 +226,11 @@ class Player(GameObject):
                         self.velyd = i.vely
                         break
 
-        if self.velx > 0 and self.vely > 0:
-            self.state = self.jumpdr
-        elif self.velx <= 0 and self.vely > 0:
+        if self.state == self.jumpul and self.vely > 0:
             self.state = self.jumpdl
-        elif self.velx > 0 and self.vely < 0:
-            self.state = self.jumpur
-        elif self.velx <= 0 and self.vely < 0:
-            self.state = self.jumpul
+        if self.state == self.jumpur and self.vely > 0:
+            self.state = self.jumpdr
+    
         
         ret = super(Player, self).tick(level, ins, objects)
         if ret == 1:
@@ -219,7 +246,7 @@ class Player(GameObject):
         self.handle_input(ins)
 
     def handle_input(self, ins):
-        left, right, up, down = False, False, False, False
+        left, right = False, False
         if self.velx > -10 and ins["keys"][pygame.K_a]:
             left = True
         if self.velx < 10 and ins["keys"][pygame.K_d]:
@@ -230,13 +257,19 @@ class Player(GameObject):
             if self.touches_ground or self.touches_box:
                 self.state = self.walkl
             else:
-                self.state = self.jumpul
+                if self.vely > 0:
+                    self.state = self.jumpdl
+                elif self.vely < 0:
+                    self.state = self.jumpul
         if right:
             self.velx = min(self.velx + 2, 12)
             if self.touches_ground or self.touches_box:
                 self.state = self.walkr
             else:
-                self.state = self.jumpur
+                if self.vely > 0:
+                    self.state = self.jumpdr
+                elif self.vely < 0:
+                    self.state = self.jumpur
         if ((not left and not right) or (left and right)):
             if self.touches_ground or self.touches_box:
                 self.velx /= 1.8
