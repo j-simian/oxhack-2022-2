@@ -1,6 +1,6 @@
 import pygame
 from PIL import Image
-from level import Level
+from level import Level, levelWon
 
 class GameObject:
     def __init__(self, x, y):
@@ -26,25 +26,32 @@ class GameObject:
         if self.collision:
             for i in range(0, len(blocks)):
                 for j in range(0, len(blocks[i])):
-                    if blocks[i][j] != 1:
+                    collide = False
+                    if blocks[i][j] != 1 and blocks[i][j] != 3:
                         continue
                     pixel = Level.tile_to_pixel(i, j)
                     if self.x+self.w <= pixel[0] and self.x+self.w + self.velx + self.velxd > pixel[0] and self.y + self.h > pixel[1] and self.y < pixel[1] + 40: #rightwards
+                        collide = True
                         self.velx = 0
                         self.velxd = 0
                         self.x = pixel[0] - self.w - 1
                     if self.x >= pixel[0]+40 and self.x + self.velx + self.velxd < pixel[0]+40 and self.y + self.h > pixel[1] and self.y < pixel[1] + 40: #leftwards
+                        collide = True
                         self.velx = 0
                         self.velxd = 0
                         self.x = pixel[0]+41
                     if self.y + self.h <= pixel[1] and self.y + self.vely + self.velyd + self.h > pixel[1] and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
+                        collide = True
                         self.vely = 0
                         self.velyd = 0
                         self.y = pixel[1] - self.h
                     if self.y >= pixel[1] + 40 and self.y + self.vely + self.velyd < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #downwards
+                        collide = True
                         self.vely = 0
                         self.velyd = 0
                         self.y = pixel[1] + 41
+                    if collide and blocks[i][j] == 3:
+                        return 1
 
                     for each in objects:
                         if isinstance(each, Controllable_Box):
@@ -62,6 +69,7 @@ class GameObject:
                                 self.y = each.y + each.h+1
         self.y += self.vely
         self.x += self.velx
+        return 0
 
 class Controllable_Box(GameObject):
     def __init__(self, x, y, w, h, levelnumber):
@@ -87,7 +95,7 @@ class Controllable_Box(GameObject):
             tiltx=min(-5+roll,60)
         else:
             tiltx=0
-
+        
         if pitch<-5:
             tilty=max(5+pitch,-60)
         elif pitch>5:
@@ -116,6 +124,11 @@ class Controllable_Box(GameObject):
                 if self.y >= pixel[1] + 40 and self.y + self.vely < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #up
                     self.vely = 0
                     self.y = pixel[1] + 41
+        self.x=min(self.x,1920-self.w)
+        self.x=max(self.x,0)
+        self.y=min(self.y,1080-self.h)
+        self.y=max(self.y,0)
+
 
 class Player(GameObject):
     def __init__(self, x, y):
@@ -144,15 +157,16 @@ class Player(GameObject):
     def tick(self, level, ins, objects):
         if abs(self.velx) < 1 and (self.touches_ground or self.touches_box):
             self.state = self.stand
-        super(Player, self).tick(level, ins, objects)
+        if super(Player, self).tick(level, ins, objects) == 1:
+            return 1
 
         if not (self.touches_box and self.touches_ground):
             self.velxd /= 1.05
             self.velyd /= 1.05
         player_tile = Level.pixel_to_tile(self.x, self.y)
         self.touches_box = False
-        if player_tile[0] > 47:
-            level.level_index += 1
+        if player_tile[0] > 46 or player_tile[0] < 0 or player_tile[1] > 26 or player_tile[1] < 0:
+            pass
         elif level.blocks[player_tile[0]][player_tile[1] + 2] == 1 or level.blocks[player_tile[0]+1][player_tile[1]+2] == 1:
             self.touches_ground = True
         else:
