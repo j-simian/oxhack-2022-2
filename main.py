@@ -14,7 +14,7 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.flip()
 
 
-levelnumber = 0
+levelnumber = 5
 objects = []
 keys = []
 bit_keys = []
