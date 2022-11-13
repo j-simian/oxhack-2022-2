@@ -64,7 +64,7 @@ class Controllable_Box(GameObject):
         self.h = h*40
         self.gravity = False
         self.collision = False
-        self.velx = 0
+        self.velx = 4
         self.me = pygame.image.load("./assets/art/lvl1/moveblock.png").convert_alpha()
 
     def render(self, screen, frame):
@@ -75,21 +75,21 @@ class Controllable_Box(GameObject):
 
         roll = ins["microbit"][0]
         pitch= ins["microbit"][1]
-        if roll<-30:
-            tiltx=max(roll,-60)
-        elif roll>30:
-            tiltx=min(roll,60)
+        if roll<-5:
+            tiltx=max(5+roll,-60)
+        elif roll>5:
+            tiltx=min(-5+roll,60)
         else:
             tiltx=0
         
-        if pitch<-30:
-            tilty=max(pitch,-60)
-        elif pitch>30:
-            tilty=min(pitch,60)
+        if pitch<-5:
+            tilty=max(5+pitch,-60)
+        elif pitch>5:
+            tilty=min(-5+pitch,60)
         else:
             tilty=0
-        self.velx = (tiltx/5 + self.velx) / 2
-        self.vely = (tilty/5 + self.vely) / 2
+        self.velx = (tiltx/4 + self.velx) / 2
+        self.vely = (tilty/4 + self.vely) / 2
 
 
         blocks=level.bounding_boxes
@@ -119,8 +119,10 @@ class Player(GameObject):
         self.gravity = True
         self.touches_box = False
         self.stand = pygame.image.load("./assets/art/sprite/stand.png").convert_alpha()
-        self.jumpr = pygame.image.load("./assets/art/sprite/jump right.png").convert_alpha()
-        self.jumpl = pygame.image.load("./assets/art/sprite/jump left.png").convert_alpha()
+        self.jumpur = pygame.image.load("./assets/art/sprite/jump up right.png").convert_alpha()
+        self.jumpul = pygame.image.load("./assets/art/sprite/jump up left.png").convert_alpha()
+        self.jumpdr = pygame.image.load("./assets/art/sprite/jump down right.png").convert_alpha()
+        self.jumpdl = pygame.image.load("./assets/art/sprite/jump down left.png").convert_alpha()
         self.walkr = [pygame.image.load("./assets/art/sprite/right walk 1.png").convert_alpha(), pygame.image.load("./assets/art/sprite/right walk 2.png").convert_alpha(), pygame.image.load("./assets/art/sprite/right walk 3.png").convert_alpha(), pygame.image.load("./assets/art/sprite/right walk 4.png").convert_alpha()]
         self.walkl = [pygame.image.load("./assets/art/sprite/left walk 1.png").convert_alpha(), pygame.image.load("./assets/art/sprite/left walk 2.png").convert_alpha(), pygame.image.load("./assets/art/sprite/left walk 3.png").convert_alpha(), pygame.image.load("./assets/art/sprite/left walk 4.png").convert_alpha()]
         self.state = self.stand
@@ -129,7 +131,7 @@ class Player(GameObject):
 
     def render(self, screen, frame):
         if self.state == self.walkl or self.state == self.walkr:
-            screen.blit(self.state[(int(frame / 12)) % 4], (self.x - 22, self.y - 15))
+            screen.blit(self.state[(int(frame / 9)) % 4], (self.x - 22, self.y - 15))
         else:
             screen.blit(self.state, (self.x - 22, self.y - 15))
 
@@ -156,10 +158,10 @@ class Player(GameObject):
                         self.touches_box = True
                         self.velxd = i.velx
                         self.velyd = i.vely
-                        if self.velxd != i.velx:
-                            self.velxd /= 1.8
-                        if self.velyd != i.vely:
-                            self.velyd /= 1.8
+                        # if self.velxd != i.velx:
+                        #     self.velxd /= 1.8
+                        # if self.velyd != i.vely:
+                        #     self.velyd /= 1.8
                         break
 
 
@@ -177,13 +179,13 @@ class Player(GameObject):
             if self.touches_ground or self.touches_box:
                 self.state = self.walkl
             else:
-                self.state = self.jumpl
+                self.state = self.jumpul
         if right:
             self.velx = min(self.velx + 2, 12)
             if self.touches_ground or self.touches_box:
                 self.state = self.walkr
             else:
-                self.state = self.jumpr
+                self.state = self.jumpur
         if ((not left and not right) or (left and right)):
             if self.touches_ground or self.touches_box:
                 self.velx /= 1.8
@@ -191,6 +193,8 @@ class Player(GameObject):
                 self.velx /= 1.05
         if ins["keys"][pygame.K_w] and (self.touches_ground or self.touches_box):
             self.vely = -15
-            self.state = self.jumpl
+            self.state = self.jumpul
+            self.velyd *= 3
+            self.velxd *= 3
         if ins["keys"][pygame.K_e]:
             self.vely = -15
