@@ -2,7 +2,7 @@ import pygame
 import game_objects
 import microbit
 from PIL import Image
-from level import Level, levelWon
+from level import Level, levelWon, dead
 
 (width, height) = (1920, 1080)
 
@@ -13,12 +13,12 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.flip()
 
 
-levelnumber = 3
+levelnumber = 4
 objects = []
 keys = []
 bit_keys = []
 level = Level(levelnumber)
-player = game_objects.Player(level.player_position[0], level.player_position[1])
+player = game_objects.Player(level.player_position[0], level.player_position[1]-40)
 objects+=[player]
 for each in level.boxes:
     objects+=[game_objects.Controllable_Box(each[0],each[1],each[2],each[3], levelnumber)]
@@ -31,7 +31,7 @@ BIT_B = 515
 
 
 def game_loop():
-    global level, objects, levelWon, levelnumber
+    global level, objects, levelWon, levelnumber, dead
     frame = 0
     running = 1
     roll, pitch = 0, 0
@@ -49,10 +49,14 @@ def game_loop():
             level.shooting_stars(screen, frame)
             level.draw_mg(screen)
             for i in objects:
-                if i.tick(level, { "keys": keys, "microbit": bit_keys }, objects) == 1:
+                state = i.tick(level, { "keys": keys, "microbit": bit_keys }, objects)
+                if state == 1:
                     levelWon = True
                     continue
-            if levelWon:
+                elif state == 2:
+                    dead = True
+                    continue
+            if levelWon or dead:
                 continue
             for i in objects:
                 i.render(screen, frame)
@@ -64,11 +68,12 @@ def game_loop():
             clock.tick(60)
             frame += 1
         print('WINWINWC')
-        levelnumber += 1
+        
+        if levelWon: levelnumber += 1
         level = Level(levelnumber)
         player = game_objects.Player(100, 100)
         objects = [player]
-        levelWon = False
+        levelWon, dead = False
         for each in level.boxes:
             objects+=[game_objects.Controllable_Box(each[0],each[1],each[2],each[3], levelnumber)]
 

@@ -53,6 +53,9 @@ class GameObject:
                     if collide and blocks[i][j] == 3:
                         return 1
 
+                    if collide and blocks[i][j] == 5:
+                        return 2
+
                     for each in objects:
                         if isinstance(each, Controllable_Box):
                             if self.x+self.w <= each.x and self.x+self.w + self.velx > each.x and self.y + self.h > each.y and self.y < each.y + each.h: #rightwards
@@ -102,8 +105,8 @@ class Controllable_Box(GameObject):
             tilty=min(-5+pitch,60)
         else:
             tilty=0
-        self.velx = (tiltx/4 + self.velx) / 2
-        self.vely = (tilty/4 + self.vely) / 2
+        self.velx = min((tiltx/4 + self.velx) / 2, 40)
+        self.vely = min((tilty/4 + self.vely) / 2, 40)
 
 
         blocks=level.bounding_boxes
@@ -157,8 +160,6 @@ class Player(GameObject):
     def tick(self, level, ins, objects):
         if abs(self.velx) < 1 and (self.touches_ground or self.touches_box):
             self.state = self.stand
-        if super(Player, self).tick(level, ins, objects) == 1:
-            return 1
 
         if not (self.touches_box and self.touches_ground):
             self.velxd /= 1.05
@@ -177,11 +178,14 @@ class Player(GameObject):
                         self.touches_box = True
                         self.velxd = i.velx
                         self.velyd = i.vely
-                        # if self.velxd != i.velx:
-                        #     self.velxd /= 1.8
-                        # if self.velyd != i.vely:
-                        #     self.velyd /= 1.8
                         break
+
+        ret = super(Player, self).tick(level, ins, objects)
+        if ret == 1:
+            return 1
+        elif ret == 2:
+            return 2
+
         self.x += self.velxd
         self.y += min(self.velyd, 0)
 
