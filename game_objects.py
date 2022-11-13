@@ -116,6 +116,11 @@ class Controllable_Box(GameObject):
                 if self.y >= pixel[1] + 40 and self.y + self.vely < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #up
                     self.vely = 0
                     self.y = pixel[1] + 41
+        self.x=min(self.x,1920-self.w)
+        self.x=max(self.x,0)
+        self.y=min(self.y,1080-self.h)
+        self.y=max(self.y,0)
+
 
 class Player(GameObject):
     def __init__(self, x, y):
