@@ -53,6 +53,9 @@ class GameObject:
                     if collide and blocks[i][j] == 3:
                         return 1
 
+                    if collide and blocks[i][j] == 5:
+                        return 2
+
                     for each in objects:
                         if isinstance(each, Controllable_Box):
                             if self.x+self.w <= each.x and self.x+self.w + self.velx > each.x and self.y + self.h > each.y and self.y < each.y + each.h: #rightwards
@@ -192,8 +195,11 @@ class Player(GameObject):
                         self.velyd = i.vely
                         break
 
-        if super(Player, self).tick(level, ins, objects) == 1:
+        ret = super(Player, self).tick(level, ins, objects)
+        if ret == 1:
             return 1
+        elif ret == 2:
+            return 2
 
         self.x += self.velxd
         self.y += min(self.velyd, 0)
