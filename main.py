@@ -8,13 +8,13 @@ from random import randint
 (width, height) = (1920, 1080)
 
 
-pygame.display.set_caption("City of Dreaming Spires")
+pygame.display.set_caption("A City of Dreaming Spires")
 pygame.init()
 screen = pygame.display.set_mode((width, height))
 pygame.display.flip()
 
 
-levelnumber = 1
+levelnumber = 0
 objects = []
 keys = []
 bit_keys = []
@@ -54,7 +54,7 @@ def game_loop():
             roll, pitch, a, b = microbit.bitman(roll, pitch)
             bit_keys=(roll, pitch, a, b)
 
-            if not start:
+            if not start and levelnumber != 0:
                 image = level.level_menu
                 if alpha < 253: alpha += 2
                 screen.fill((0,0,0))    
