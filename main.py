@@ -13,7 +13,7 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.flip()
 
 
-levelnumber = 4
+levelnumber = 1
 objects = []
 keys = []
 bit_keys = []
@@ -23,6 +23,7 @@ objects+=[player]
 for each in level.boxes:
     objects+=[game_objects.Controllable_Box(each[0],each[1],each[2],each[3], levelnumber)]
 clock = pygame.time.Clock()
+start = False
 
 ROLL = 512
 PITCH = 513
@@ -31,36 +32,51 @@ BIT_B = 515
 
 
 def game_loop():
-    global level, objects, levelWon, levelnumber, dead
+    global level, objects, levelWon, levelnumber, dead, start
     frame = 0
     running = 1
     roll, pitch = 0, 0
+    alpha = 0
     while running:
-        while not (levelWon or dead):
-            keys=pygame.key.get_pressed()
+
+        while not (levelWon or dead):   
+
+            keys=pygame.key.get_pressed()             
 
             bit_keys = ()
             roll, pitch, a, b = microbit.bitman(roll, pitch)
             bit_keys=(roll, pitch, a, b)
 
-            # render
-            pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))
-            level.draw_bg(screen, frame)
-            level.shooting_stars(screen, frame)
-            level.draw_mg(screen)
-            for i in objects:
-                state = i.tick(level, { "keys": keys, "microbit": bit_keys }, objects)
-                if state == 1:
-                    levelWon = True
+            if not start:
+                if alpha < 254: alpha += 1
+                image = level.level_menu
+                screen.fill((0,0,0))    
+                image.set_alpha(alpha)    
+                screen.blit(image, [0,0])
+
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYDOWN:
+                        start = True
+
+            else:
+                # render
+                pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))
+                level.draw_bg(screen, frame)
+                level.shooting_stars(screen, frame)
+                level.draw_mg(screen)
+                for i in objects:
+                    state = i.tick(level, { "keys": keys, "microbit": bit_keys }, objects)
+                    if state == 1:
+                        levelWon = True
+                        continue
+                    elif state == 2:
+                        dead = True
+                        continue
+                if levelWon or dead:
                     continue
-                elif state == 2:
-                    dead = True
-                    continue
-            if levelWon or dead:
-                continue
-            for i in objects:
-                i.render(screen, frame)
-            level.draw_fg(screen)
+                for i in objects:
+                    i.render(screen, frame)
+                level.draw_fg(screen)
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
