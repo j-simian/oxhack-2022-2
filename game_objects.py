@@ -87,23 +87,23 @@ class Controllable_Box(GameObject):
     def tick(self, level, ins, objects):
         super(Controllable_Box, self).tick(level, ins, objects)
 
-        # roll = ins["microbit"][0]
-        # pitch= ins["microbit"][1]
-        # if roll<-5:
-        #     tiltx=max(5+roll,-60)
-        # elif roll>5:
-        #     tiltx=min(-5+roll,60)
-        # else:
-        #     tiltx=0
+        roll = ins["microbit"][0]
+        pitch= ins["microbit"][1]
+        if roll<-5:
+            tiltx=max(5+roll,-60)
+        elif roll>5:
+            tiltx=min(-5+roll,60)
+        else:
+            tiltx=0
         
-        # if pitch<-5:
-        #     tilty=max(5+pitch,-60)
-        # elif pitch>5:
-        #     tilty=min(-5+pitch,60)
-        # else:
-        #     tilty=0
-        # self.velx = (tiltx/4 + self.velx) / 2
-        # self.vely = (tilty/4 + self.vely) / 2
+        if pitch<-5:
+            tilty=max(5+pitch,-60)
+        elif pitch>5:
+            tilty=min(-5+pitch,60)
+        else:
+            tilty=0
+        self.velx = (tiltx/4 + self.velx) / 2
+        self.vely = (tilty/4 + self.vely) / 2
 
 
         blocks=level.bounding_boxes
