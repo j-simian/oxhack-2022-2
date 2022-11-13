@@ -12,13 +12,14 @@ pygame.init()
 screen = pygame.display.set_mode((width, height))
 pygame.display.flip()
 
-player = game_objects.Player(100, 100)
 
 levelnumber = 1
-objects = [player]
+objects = []
 keys = []
 bit_keys = []
 level = Level(levelnumber)
+player = game_objects.Player(level.player_position[0], level.player_position[1])
+objects+=player
 for each in level.boxes:
     objects+=[game_objects.Controllable_Box(each[0],each[1],each[2],each[3], levelnumber)]
 clock = pygame.time.Clock()
@@ -39,8 +40,8 @@ def game_loop():
             keys=pygame.key.get_pressed()
 
             bit_keys = ()
-            # roll, pitch, a, b = microbit.bitman(roll, pitch)
-            # bit_keys=(roll, pitch, a, b)
+            roll, pitch, a, b = microbit.bitman(roll, pitch)
+            bit_keys=(roll, pitch, a, b)
 
             # render
             pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))
@@ -59,7 +60,7 @@ def game_loop():
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = 0
+                    running = 0; exit()
             clock.tick(60)
             frame += 1
         print('WINWINWC')

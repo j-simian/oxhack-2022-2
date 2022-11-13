@@ -87,23 +87,23 @@ class Controllable_Box(GameObject):
     def tick(self, level, ins, objects):
         super(Controllable_Box, self).tick(level, ins, objects)
 
-        # roll = ins["microbit"][0]
-        # pitch= ins["microbit"][1]
-        # if roll<-5:
-        #     tiltx=max(5+roll,-60)
-        # elif roll>5:
-        #     tiltx=min(-5+roll,60)
-        # else:
-        #     tiltx=0
+        roll = ins["microbit"][0]
+        pitch= ins["microbit"][1]
+        if roll<-5:
+            tiltx=max(5+roll,-60)
+        elif roll>5:
+            tiltx=min(-5+roll,60)
+        else:
+            tiltx=0
         
-        # if pitch<-5:
-        #     tilty=max(5+pitch,-60)
-        # elif pitch>5:
-        #     tilty=min(-5+pitch,60)
-        # else:
-        #     tilty=0
-        # self.velx = (tiltx/4 + self.velx) / 2
-        # self.vely = (tilty/4 + self.vely) / 2
+        if pitch<-5:
+            tilty=max(5+pitch,-60)
+        elif pitch>5:
+            tilty=min(-5+pitch,60)
+        else:
+            tilty=0
+        self.velx = (tiltx/4 + self.velx) / 2
+        self.vely = (tilty/4 + self.vely) / 2
 
 
         blocks=level.bounding_boxes
@@ -124,6 +124,11 @@ class Controllable_Box(GameObject):
                 if self.y >= pixel[1] + 40 and self.y + self.vely < pixel[1] + 40 and self.x <= pixel[0]+40 and self.x + self.w >= pixel[0]: #up
                     self.vely = 0
                     self.y = pixel[1] + 41
+        self.x=min(self.x,1920-self.w)
+        self.x=max(self.x,0)
+        self.y=min(self.y,1080-self.h)
+        self.y=max(self.y,0)
+
 
 class Player(GameObject):
     def __init__(self, x, y):
