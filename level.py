@@ -3,6 +3,8 @@ import pygame
 import math
 import random
 
+levelWon = False
+
 class Level:
     def __init__(self, levelnumber):
         self.level_index = levelnumber
