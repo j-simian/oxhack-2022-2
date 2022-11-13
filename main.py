@@ -13,7 +13,7 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.flip()
 
 
-levelnumber = 1
+levelnumber = 5
 objects = []
 keys = []
 bit_keys = []
@@ -47,9 +47,9 @@ def game_loop():
             roll, pitch, a, b = microbit.bitman(roll, pitch)
             bit_keys=(roll, pitch, a, b)
 
+            image = level.level_menu
             if not start:
-                if alpha < 254: alpha += 1
-                image = level.level_menu
+                if alpha < 253: alpha += 2
                 screen.fill((0,0,0))    
                 image.set_alpha(alpha)    
                 screen.blit(image, [0,0])
@@ -60,6 +60,7 @@ def game_loop():
 
             else:
                 # render
+
                 pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, width, height))
                 level.draw_bg(screen, frame)
                 level.shooting_stars(screen, frame)
@@ -77,6 +78,11 @@ def game_loop():
                 for i in objects:
                     i.render(screen, frame)
                 level.draw_fg(screen)
+                if alpha > 0: 
+                    alpha = max(0, alpha -5)  
+                    image.set_alpha(alpha)    
+                    screen.blit(image, [0,0])
+
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -89,7 +95,7 @@ def game_loop():
         level = Level(levelnumber)
         player = game_objects.Player(level.player_position[0], level.player_position[1])
         objects = [player]
-        levelWon, dead = False, False
+        start, levelWon, dead = False, False, False
         for each in level.boxes:
             objects+=[game_objects.Controllable_Box(each[0],each[1],each[2],each[3], levelnumber)]
 

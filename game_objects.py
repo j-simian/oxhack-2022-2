@@ -30,6 +30,25 @@ class GameObject:
             right_collided=False
             for i in range(0, len(blocks)):
                 for j in range(0, len(blocks[i])):
+                    for each in objects:
+                        if isinstance(each, Controllable_Box):
+                            if self.x+self.w <= each.x and self.x+self.w + self.velx > each.x and self.y + self.h > each.y and self.y < each.y + each.h: #rightwards
+                                right_collided=True
+                                self.velx = 0
+                                self.x = each.x - self.w - 1
+                            if self.x >= each.x+each.w and self.x + self.velx < each.x+each.w and self.y + self.h > each.y and self.y < each.y + each.h: #leftwards
+                                left_collided=True
+                                self.velx = 0
+                                self.x = each.x+each.w+1
+                            if self.y + self.h < each.y + 40 and self.y + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards - should there be a self.vely in here???
+                                down_collided=True
+                                self.vely = max(0,each.vely)
+                                self.y = each.y - self.h
+                            if self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x: #upwards
+                                up_collided=True
+                                self.vely = 0
+                                self.y = each.y + each.h+1
+
                     collide = False
                     if blocks[i][j] not in [1,3,5]:
                         continue
@@ -64,24 +83,6 @@ class GameObject:
                     if collide and blocks[i][j] == 5:
                         return 2
 
-                    for each in objects:
-                        if isinstance(each, Controllable_Box):
-                            if self.x+self.w <= each.x and self.x+self.w + self.velx > each.x and self.y + self.h > each.y and self.y < each.y + each.h: #rightwards
-                                right_collided=True
-                                self.velx = 0
-                                self.x = each.x - self.w - 1
-                            if self.x >= each.x+each.w and self.x + self.velx < each.x+each.w and self.y + self.h > each.y and self.y < each.y + each.h: #leftwards
-                                left_collided=True
-                                self.velx = 0
-                                self.x = each.x+each.w+1
-                            if self.y + self.h < each.y + 40 and self.y + self.h > each.y and self.x <= each.x+each.w and self.x + self.w >= each.x: #downwards - should there be a self.vely in here???
-                                down_collided=True
-                                self.vely = 0
-                                self.y = each.y - self.h
-                            if self.y >= each.y + each.h and self.y + self.vely < each.y + each.h and self.x <= each.x+each.w and self.x + self.w >= each.x: #upwards
-                                up_collided=True
-                                self.vely = 0
-                                self.y = each.y + each.h+1
 
             if (up_collided and down_collided) or (left_collided and right_collided): return 2
         self.y += self.vely
