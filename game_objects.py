@@ -167,7 +167,6 @@ class Controllable_Box(GameObject):
                         x4=x3+40
                         y4=y3+40
                         if (x1+20<x4)and(x3+20<x2)and(y1+20<y4)and(y3+20<y2):
-                            print("a")
                             each.alive=False
 
                         x5=self.x
@@ -175,7 +174,6 @@ class Controllable_Box(GameObject):
                         x6=x5+self.w
                         y6=y5+self.h
                         if (x1+20<x6)and(x5+20<x2)and(y1+20<y6)and(y5+20<y2):
-                            print("b")
                             each.alive=False
 
 
