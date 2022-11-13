@@ -64,7 +64,7 @@ class Controllable_Box(GameObject):
         self.h = h*40
         self.gravity = False
         self.collision = False
-        self.velx = 0
+        self.velx = 4
         self.me = pygame.image.load("./assets/art/lvl1/moveblock.png").convert_alpha()
 
     def render(self, screen, frame):
@@ -73,23 +73,23 @@ class Controllable_Box(GameObject):
     def tick(self, level, ins, objects):
         super(Controllable_Box, self).tick(level, ins, objects)
 
-        roll = ins["microbit"][0]
-        pitch= ins["microbit"][1]
-        if roll<-30:
-            tiltx=max(roll,-60)
-        elif roll>30:
-            tiltx=min(roll,60)
-        else:
-            tiltx=0
+        # roll = ins["microbit"][0]
+        # pitch= ins["microbit"][1]
+        # if roll<-30:
+        #     tiltx=max(roll,-60)
+        # elif roll>30:
+        #     tiltx=min(roll,60)
+        # else:
+        #     tiltx=0
         
-        if pitch<-30:
-            tilty=max(pitch,-60)
-        elif pitch>30:
-            tilty=min(pitch,60)
-        else:
-            tilty=0
-        self.velx = (tiltx/5 + self.velx) / 2
-        self.vely = (tilty/5 + self.vely) / 2
+        # if pitch<-30:
+        #     tilty=max(pitch,-60)
+        # elif pitch>30:
+        #     tilty=min(pitch,60)
+        # else:
+        #     tilty=0
+        # self.velx = (tiltx/5 + self.velx) / 2
+        # self.vely = (tilty/5 + self.vely) / 2
 
 
         blocks=level.bounding_boxes
@@ -158,10 +158,10 @@ class Player(GameObject):
                         self.touches_box = True
                         self.velxd = i.velx
                         self.velyd = i.vely
-                        if self.velxd != i.velx:
-                            self.velxd /= 1.8
-                        if self.velyd != i.vely:
-                            self.velyd /= 1.8
+                        # if self.velxd != i.velx:
+                        #     self.velxd /= 1.8
+                        # if self.velyd != i.vely:
+                        #     self.velyd /= 1.8
                         break
 
 
@@ -194,5 +194,7 @@ class Player(GameObject):
         if ins["keys"][pygame.K_w] and (self.touches_ground or self.touches_box):
             self.vely = -15
             self.state = self.jumpul
+            self.velyd *= 3
+            self.velxd *= 3
         if ins["keys"][pygame.K_e]:
             self.vely = -15
