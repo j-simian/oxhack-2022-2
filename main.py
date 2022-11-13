@@ -14,6 +14,7 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.flip()
 
 
+levelnumber = 9
 levelnumber = 0
 objects = []
 keys = []
